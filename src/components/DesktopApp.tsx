@@ -1,5 +1,5 @@
 import React from 'react'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { HashRouter, Routes, Route } from 'react-router-dom'
 import Layout from './Layout'
 import Home from '../pages/Home'
 import Projects from '../pages/Projects'
@@ -20,7 +20,7 @@ const HomeFeed: React.FC = () => (
 )
 
 const DesktopApp: React.FC = () => (
-  <BrowserRouter>
+  <HashRouter>
     <ScrollToTop />
     <Routes>
       <Route path="/" element={<Layout><HomeFeed /></Layout>} />
@@ -29,7 +29,7 @@ const DesktopApp: React.FC = () => (
       <Route path="/contact" element={<Layout><Contact /></Layout>} />
       <Route path="*" element={<Layout><HomeFeed /></Layout>} />
     </Routes>
-  </BrowserRouter>
+  </HashRouter>
 )
 
 export default DesktopApp

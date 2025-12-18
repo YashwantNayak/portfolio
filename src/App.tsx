@@ -1,22 +1,23 @@
-import React, { useEffect, useState } from 'react'
-import DesktopApp from './components/DesktopApp'
-import MobileOnly from './components/MobileOnly'
+import { useEffect, useState } from "react";
+import DesktopApp from "./components/DesktopApp";
+import MobileOnly from "./components/MobileOnly";
 
-const App: React.FC = () => {
-  const [isMobile, setIsMobile] = useState(false)
+export default function App() {
+  const [isMobile, setIsMobile] = useState<boolean | null>(null);
 
   useEffect(() => {
-    const checkScreen = () => {
-      setIsMobile(window.innerWidth <= 768)
-    }
+    const check = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
 
-    checkScreen()
-    window.addEventListener('resize', checkScreen)
+    check();
+    window.addEventListener("resize", check);
 
-    return () => window.removeEventListener('resize', checkScreen)
-  }, [])
+    return () => window.removeEventListener("resize", check);
+  }, []);
 
-  return isMobile ? <MobileOnly /> : <DesktopApp />
+  // IMPORTANT: prevents blank screen during hydration
+  if (isMobile === null) return null;
+
+  return isMobile ? <MobileOnly /> : <DesktopApp />;
 }
-
-export default App
