@@ -1,31 +1,22 @@
-import React from 'react'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import Layout from './components/Layout'
-import Home from './pages/Home'
-import Projects from './pages/Projects'
-import Experience from './pages/Experience'
-import Tools from './pages/Tools'
-import Thoughts from './pages/Thoughts'
-import Contact from './pages/Contact'
+import React, { useEffect, useState } from 'react'
+import DesktopApp from './components/DesktopApp'
+import MobileOnly from './components/MobileOnly'
 
-const HomeFeed: React.FC = () => (
-  <>
-    <Home />
-    <Projects />
-    <Experience />
-    <Tools />
-  </>
-)
+const App: React.FC = () => {
+  const [isMobile, setIsMobile] = useState(false)
 
-const App: React.FC = () => (
-  <BrowserRouter>
-    <Routes>
-      <Route path="/" element={<Layout><HomeFeed /></Layout>} />
-      <Route path="/thoughts" element={<Layout><Thoughts /></Layout>} />
-      <Route path="/contact" element={<Layout><Contact /></Layout>} />
-      <Route path="*" element={<Layout><HomeFeed /></Layout>} />
-    </Routes>
-  </BrowserRouter>
-)
+  useEffect(() => {
+    const checkScreen = () => {
+      setIsMobile(window.innerWidth <= 768)
+    }
+
+    checkScreen()
+    window.addEventListener('resize', checkScreen)
+
+    return () => window.removeEventListener('resize', checkScreen)
+  }, [])
+
+  return isMobile ? <MobileOnly /> : <DesktopApp />
+}
 
 export default App

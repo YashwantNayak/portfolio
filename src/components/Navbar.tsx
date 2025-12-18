@@ -75,7 +75,7 @@ const linkNames: LinkConfig[] = [
   { label: 'Projects', targetId: 'projects', activeKey: 'projects', icon: <IconFolder /> },
   { label: 'Experience', targetId: 'experience', activeKey: 'experience', icon: <IconBriefcase /> },
   { label: 'Tools', targetId: 'tools', activeKey: 'tools', icon: <IconWrench /> },
-  { label: 'Thoughts', route: '/thoughts', activeKey: '/thoughts', icon: <IconPencil /> },
+  { label: 'Resume', route: '/resume', activeKey: '/resume', icon: <IconPencil /> },
   { label: "Let's Work", route: '/contact', activeKey: '/contact', icon: <IconSpark /> }
 ]
 
@@ -147,7 +147,14 @@ const Navbar: React.FC = () => {
   const scrollToSection = React.useCallback((targetId: string) => {
     const element = document.getElementById(targetId)
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      const headerOffset = 120
+      const elementPosition = element.getBoundingClientRect().top
+      const offsetPosition = elementPosition + window.pageYOffset - headerOffset
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      })
     }
   }, [])
 
@@ -180,7 +187,7 @@ const Navbar: React.FC = () => {
           }
         })
       },
-      { threshold: 0.35 }
+      { threshold: 0.15, rootMargin: '-80px 0px -50% 0px' }
     )
 
     linkNames.forEach(({ targetId }) => {
