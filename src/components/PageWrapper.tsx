@@ -12,11 +12,14 @@ interface PageWrapperProps {
 
 const wrapperStyle: React.CSSProperties = {
   width: '100%',
-  padding: 48,
+  padding: '48px 40px',
   borderRadius: radii.xl,
   background: palette.background,
   boxShadow: shadows.soft,
-  border: `1px solid rgba(0,0,0,0.04)`
+  border: `1px solid rgba(0,0,0,0.04)`,
+  maxWidth: '1400px',
+  margin: '0 auto',
+  boxSizing: 'border-box'
 }
 
 const titleStyle: React.CSSProperties = {

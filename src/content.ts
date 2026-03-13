@@ -23,7 +23,7 @@ export const stats = [
 export const projects = [
   {
     id: 'mis-local-bodies',
-    title: 'MIS Local Bodies Platform',
+    title: 'Greeen Palna - Government Plantation Monitoring System',
     shortDesc: 'Comprehensive MIS platform with cookie-less authentication and analytics dashboards.',
     description: `Developed a comprehensive Management Information System for local government bodies with advanced features including Google and Facebook login integration, file management, and real-time analytics dashboards. The platform handles time-based data uploads and event management with a focus on performance and security.`,
     tags: ['React', 'Node.js', 'MongoDB', 'Analytics'],
@@ -51,7 +51,7 @@ export const projects = [
     tags: ['React', 'TypeScript', 'UI/UX', 'Payment'],
     role: 'Frontend Developer',
     year: '2023',
-    images: ['/projects/bharat-1.jpg'],
+    images: ['projects/mediguru.png'],
     links: {
       live: 'https://example.com'
     },
