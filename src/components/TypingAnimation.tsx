@@ -77,7 +77,16 @@ const TypingAnimation: React.FC<TypingAnimationProps> = ({
   ])
 
   return (
-    <span className={className} style={style}>
+    <span 
+      className={className} 
+      style={{
+        display: 'inline-block',
+        maxWidth: '100%',
+        wordBreak: 'break-word',
+        whiteSpace: 'normal',
+        ...style
+      }}
+    >
       {displayedText}
       <span
         style={{

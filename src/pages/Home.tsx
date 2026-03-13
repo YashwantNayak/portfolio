@@ -16,12 +16,16 @@ const gridStyle: React.CSSProperties = {
 }
 
 const heroTitle: React.CSSProperties = {
-  fontSize: 94,
-  lineHeight: 1,
+  fontSize: 74,
+  lineHeight: 1.1,
   margin: 0,
-  letterSpacing: -3,
+  letterSpacing: -2,
   color: palette.text,
-  whiteSpace: 'nowrap'
+  maxWidth: '100%',
+  wordBreak: 'break-word',
+  minHeight: '140px',
+  display: 'flex',
+  alignItems: 'flex-start'
 }
 
 const smallHeroText: React.CSSProperties = {
@@ -36,7 +40,7 @@ const paragraph: React.CSSProperties = {
   fontSize: 18,
   color: 'rgba(0,0,0,0.65)',
   lineHeight: 1.6,
-  margin: '24px 0 32px',
+  margin: '48px 0 32px',
   maxWidth: 600
 }
 
@@ -311,7 +315,7 @@ const Home: React.FC = () => {
         {/* Text Section - RIGHT */}
         <div>
           <h2 style={smallHeroText}>I am</h2>
-          <h1 style={heroTitle}>
+          <h3 style={heroTitle}>
             <TypingAnimation
               roles={["Software Engineer", "Full-stack Developer", "AI Enthusiast", "App Developer", "Data Analyst"]}
               typingSpeed={80}
@@ -320,7 +324,7 @@ const Home: React.FC = () => {
               startDelay={400}
               loop={true}
             />
-          </h1>
+          </h3>
           <p style={paragraph}>
             {personalInfo.bio}
           </p>

@@ -11,7 +11,11 @@ const surfaceStyle: React.CSSProperties = {
   padding: '48px 36px',
   color: '#f8f8f8',
   position: 'relative',
-  overflow: 'hidden'
+  overflow: 'hidden',
+  maxWidth: '1400px',
+  margin: '0 auto',
+  width: '100%',
+  boxSizing: 'border-box'
 }
 
 const glowStyle: React.CSSProperties = {
