@@ -32,3 +32,4 @@ pnpm dev
 - Each page is self-contained, so you can export them individually (rename to `.jsx` if you prefer pure JSX).
 
 Let me know if you want follow-ups such as deployment config, tests, or a dark mode variant.
+r
