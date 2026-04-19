@@ -18,7 +18,7 @@ const Experience: React.FC = () => (
     sectionId="experience"
     frameless
     title="Experience"
-    subtitle="A timeline of collaborations with product teams, studios, and forward-looking companies."
+    subtitle="A showcase of my work in developing, improving, and delivering scalable software projects.."
   >
     <div style={{ position: 'relative', paddingLeft: 40 }}>
       <span style={lineStyle} />

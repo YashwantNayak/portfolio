@@ -11,18 +11,18 @@ export const socialLinks = {
   github: 'https://github.com/yashwantnayak',
   linkedin: 'https://linkedin.com/in/yashwantnayak',
   twitter: 'https://twitter.com/yashwantnayak',
-  email: 'mailto:yashwant@example.com'
+  email: 'yashwant.nayak2023@ssipmt.com'
 }
 
 export const stats = [
-  { label: 'Years Experience', value: '3+' },
-  { label: 'Projects', value: '25+' },
-  { label: 'Technologies', value: '15+' }
+  { label: 'Years Experience', value: '0-1' },
+  { label: 'Projects', value: '10+' },
+  { label: 'Technologies', value: '10+' }
 ]
 
 export const projects = [
   {
-    id: 'mis-local-bodies',
+    id: 'pid-1',
     title: 'Greeen Palna - Government Plantation Monitoring System',
     shortDesc: 'Comprehensive MIS platform with cookie-less authentication and analytics dashboards.',
     description: `Developed a comprehensive Management Information System for local government bodies with advanced features including Google and Facebook login integration, file management, and real-time analytics dashboards. The platform handles time-based data uploads and event management with a focus on performance and security.`,
@@ -190,42 +190,23 @@ export const projects = [
 
 export const experience = [
   {
-    company: 'Cybrom Technology',
-    role: 'Python Developer',
-    date: 'Feb 2025 — Present',
-    summary: 'Building efficient backend systems using Python and Flask. Developing mobile applications using UI Path.',
-    details: [
-      'Building efficient backend systems using Python and Flask',
-      'Developing mobile applications using UI Path',
-      'Implementing RESTful APIs and microservices',
-      'Collaborating with cross-functional teams'
-    ]
+    company: 'VNR pvt ltd',
+    role: 'Software developer intern',
+    date: 'Feb 2026 — Present',
+    summary: 'I worked in software support, where I fixed bugs and improved UI across multiple projects. I also contributed innovative ideas for product marketing.',
   },
   {
-    company: 'Tatva Global',
-    role: 'MIS Local Bodies Developer',
-    date: 'Aug 2024 — Jan 2025',
-    summary: 'Developed comprehensive MIS platforms with advanced authentication and analytics features.',
-    details: [
-      'Developed comprehensive MIS platforms with cookie-less features',
-      'Implemented Google and Facebook login; file, user authentication',
-      'Built CRUD application and integrated data analytics dashboards',
-      'Created event pages and time-based data upload functionality',
-      'Ensured cross-browser compatibility and performance optimization'
-    ]
+    company: 'SetMyCart',
+    role: 'Software developer intern',
+    date: ' Jun 2025 - Aug 2025',
+    summary: 'Development of projects like SkyTM (Digital Wallet System), handling end-to-end design, development, and deployment using Angular, React.js, .NET, and Bootstrap.',
   },
   {
-    company: 'Conative IT Solutions',
-    role: 'Full Stack Developer',
-    date: 'Jul 2023 — Aug 2024',
-    summary: 'Designed UI prototypes and developed admin portals with secure payment workflows.',
-    details: [
-      'Designed and developed UI designs with fully functional web prototypes',
-      'Developed admin portal for Bharat Plus app',
-      'Implemented payment and item-filter actions with secure workflows',
-      'Collaborated with designers and backend team for API integration',
-      'Performed code reviews and deployment'
-    ]
+    company: 'SSIPMT (COE)',
+    role: 'Full Stack Developer (core team member)',
+    date: 'Jul 2025 — Present',
+    summary: 'Contributed to 8+ government projects currently live and used by citizens, developing web portals and applications for the Chhattisgarh government.',
+    
   }
 ]
 

@@ -1,6 +1,7 @@
 import React from 'react'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
+import UnicornScene from 'unicornstudio-react'
 import TypingAnimation from '../components/TypingAnimation'
 import { stats, personalInfo } from '../content'
 import { palette, shadows } from '../theme'
@@ -111,6 +112,90 @@ const profileImage: React.CSSProperties = {
   objectPosition: 'center'
 }
 
+const spiderImageButtonStyle: React.CSSProperties = {
+  position: 'fixed',
+  top: -10,
+  right: 80,
+  width: 180,
+  height: 140,
+  cursor: 'pointer',
+  zIndex: 70
+}
+
+const spiderImageStyle: React.CSSProperties = {
+  width: '130%',
+  height: '130%',
+  objectFit: 'contain',
+  userSelect: 'none',
+  pointerEvents: 'none'
+}
+
+const spiderBackdropStyle: React.CSSProperties = {
+  position: 'fixed',
+  inset: 0,
+  background: 'rgba(0,0,0,0.45)',
+  backdropFilter: 'blur(10px)',
+  zIndex: 95,
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  padding: 24,
+}
+
+const spiderModalStyle: React.CSSProperties = {
+  position: 'absolute',
+  width: 'min(82vw, 900px)',
+  aspectRatio: '16/10',
+  maxHeight: '82vh',
+  borderRadius: 18,
+  border: '1px solid rgba(0, 0, 0, 0.28)',
+  background: 'linear-gradient(150deg, #000000 0%, #000000 100%)',
+  boxShadow: shadows.deep,
+  padding: 1,
+  overflow: 'hidden',
+  isolation: 'isolate'
+}
+
+const spiderSceneWrapStyle: React.CSSProperties = {
+  // position: 'absolute',
+  width: '100px',
+  height: '120px',
+  borderRadius: 14,
+  background: '#0b0b0b',
+  overflow: 'hidden'
+}
+
+const spiderSceneInnerStyle: React.CSSProperties = {
+  position: 'absolute',
+  inset: 0,
+  width: '100%',
+  height: '100%',
+  transform: 'translateY(-7%) scale(1.08)',
+  transformOrigin: 'top center',
+  pointerEvents: 'none',
+  zIndex: 0
+}
+
+const spiderCloseButtonStyle: React.CSSProperties = {
+  position: 'absolute',
+  top: 16,
+  right: 16,
+  width: 40,
+  height: 40,
+  borderRadius: '50%',
+  border: `1px solid ${palette.outline}`,
+  background: '#fff',
+  color: palette.text,
+  fontSize: 22,
+  lineHeight: 1,
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  cursor: 'pointer',
+  zIndex: 10,
+  pointerEvents: 'auto'
+}
+
 const scrollToSection = (targetId: string) => {
   const element = document.getElementById(targetId)
   if (element) {
@@ -120,15 +205,92 @@ const scrollToSection = (targetId: string) => {
 
 const Home: React.FC = () => {
   const navigate = useNavigate()
+  const [isSpiderModalOpen, setIsSpiderModalOpen] = React.useState(false)
+
+  React.useEffect(() => {
+    const onEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setIsSpiderModalOpen(false)
+      }
+    }
+
+    window.addEventListener('keydown', onEscape)
+    return () => window.removeEventListener('keydown', onEscape)
+  }, [])
 
   return (
-    <section id="home" style={{ width: '100%', padding: '48px 0' }}>
+    <>
       <motion.div
-        style={gridStyle}
-        initial={{ opacity: 0, y: 45 }}
+        style={spiderImageButtonStyle}
+        initial={{ opacity: 0, y: -120 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+        transition={{ duration: 5.75, ease: [0.22, 1, 0.36, 1], delay: 1.0 }}
+        whileHover={{ scale: 1.06 }}
+        whileTap={{ scale: 0.96 }}
+        role="button"
+        tabIndex={0}
+        onClick={() => setIsSpiderModalOpen(true)}
+        onKeyDown={(event) => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault()
+            setIsSpiderModalOpen(true)
+          }
+        }}
+        aria-label="Open spider modal"
       >
+        <img src="/spider.png" alt="Spider icon" style={spiderImageStyle} />
+      </motion.div>
+
+      <AnimatePresence>
+        {isSpiderModalOpen && (
+          <motion.div
+            style={spiderBackdropStyle}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setIsSpiderModalOpen(false)}
+          >
+            <motion.div
+              style={spiderModalStyle}
+              initial={{ opacity: 0, scale: 0.9, y: 30 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.94, y: 24 }}
+              transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+              onClick={(event) => event.stopPropagation()}
+            >
+              <button
+                type="button"
+                style={spiderCloseButtonStyle}
+                onClick={() => setIsSpiderModalOpen(false)}
+                aria-label="Close Spider modal"
+              >
+                ×
+              </button>
+
+              <div style={spiderSceneWrapStyle}>
+                <div style={spiderSceneInnerStyle}>
+                  <UnicornScene
+                    projectId="zdMdn2BqTQCRb3EBGdww"
+                    width="100%"
+                    height="100%"
+                    scale={1}
+                    dpi={1.5}
+                    sdkUrl="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@2.1.6/dist/unicornStudio.umd.js"
+                  />
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <section id="home" style={{ width: '100%', padding: '48px 0' }}>
+        <motion.div
+          style={gridStyle}
+          initial={{ opacity: 0, y: 45 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+        >
         {/* Profile Image Section - LEFT */}
         <div style={profileContainer}>
           <motion.div
@@ -369,8 +531,9 @@ const Home: React.FC = () => {
             ))}
           </div>
         </div>
-      </motion.div>
-    </section>
+        </motion.div>
+      </section>
+    </>
   )
 }
 
