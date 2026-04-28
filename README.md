@@ -1,6 +1,7 @@
 # Portfolio Website
 
-Personal portfolio built with React + Vite.
+Personal portfolio
+built with React + Vite.
 Desktop-first experience with animation-heavy UI and section-based flow.
 
 ## What is included
