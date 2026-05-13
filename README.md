@@ -65,7 +65,6 @@ npm run deploy
 - /blog/:slug -> Blog post page
 - /contact -> Contact page
 - * -> Falls back to Home feed
-
 Routing is defined in src/components/DesktopApp.tsx.
 
 ## Important files to edit
