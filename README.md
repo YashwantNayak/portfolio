@@ -75,7 +75,7 @@ Routing is defined in src/components/DesktopApp.tsx.
 - src/components/MobileOnly.tsx -> mobile fallback view
 - public/images and public/projects -> static assets
 
-## Notes
+#Notes
 
 - Desktop layout loads for width >= 768, otherwise mobile fallback screen is shown.
 - If scene/embed behaves differently across systems, test on Node 20 and latest npm.
