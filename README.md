@@ -16,7 +16,7 @@ Desktop-first experience with animation-heavy UI and section-based flow.
 
 - React 18
 - TypeScript
-- Vite 
+- Vite 5
 - React Router DOM 6 (HashRouter)
 - Framer Motion
 - unicornstudio-react
