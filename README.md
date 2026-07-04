@@ -4,6 +4,8 @@ Personal portfolio
 built with React + Vite.
 Desktop-first experience with animation-heavy UI and section-based flow.
 
+
+
 ## What is included
 
 - Hero, projects, experience, tools, resume, contact pages
