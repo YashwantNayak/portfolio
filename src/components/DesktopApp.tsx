@@ -8,6 +8,7 @@ import Tools from '../pages/Tools'
 import Thoughts from '../pages/Thoughts'
 import BlogPost from '../pages/BlogPost'
 import Contact from '../pages/Contact'
+import Admin from '../pages/Admin'
 import ScrollToTop from './ScrollToTop'
 
 const HomeFeed: React.FC = () => (
@@ -27,6 +28,7 @@ const DesktopApp: React.FC = () => (
       <Route path="/resume" element={<Layout><Thoughts /></Layout>} />
       <Route path="/blog/:slug" element={<Layout><BlogPost /></Layout>} />
       <Route path="/contact" element={<Layout><Contact /></Layout>} />
+      <Route path="/admin" element={<Admin />} />
       <Route path="*" element={<Layout><HomeFeed /></Layout>} />
     </Routes>
   </HashRouter>

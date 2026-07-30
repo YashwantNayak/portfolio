@@ -33,7 +33,7 @@ const TypingAnimation: React.FC<TypingAnimationProps> = ({
     }
 
     const currentRole = roles[currentIndex]
-    let timeout: NodeJS.Timeout
+    let timeout: ReturnType<typeof setTimeout>
 
     if (!isDeleting && displayedText === currentRole) {
       timeout = setTimeout(() => {

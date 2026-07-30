@@ -2,7 +2,7 @@ import React from 'react'
 import { motion } from 'framer-motion'
 import PageWrapper from '../components/PageWrapper'
 import { palette, shadows, radii } from '../theme'
-import { tools } from '../content'
+import { tools } from '../data'
 
 const resumeContentStyle: React.CSSProperties = {
   padding: 40,

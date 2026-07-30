@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import PageWrapper from '../components/PageWrapper'
-import { tools } from '../content'
+import { tools } from '../data'
 import { palette, shadows } from '../theme'
 
 const tabOptions = [
-  
+
   { id: 'frontend', label: 'Frontend' },
   { id: 'backend', label: 'Backend' },
   { id: 'programming', label: 'Programming Languages' },
@@ -171,17 +171,17 @@ const Tools: React.FC = () => {
                 transition={{ delay: i * 0.02 }}
                 whileHover={{ y: -4 }}
               >
-                <motion.div 
+                <motion.div
                   style={iconWrapperStyle}
-                  whileHover={{ 
+                  whileHover={{
                     background: 'rgba(183, 171, 171, 0.04)',
                     borderColor: 'rgba(0,0,0,0.1)',
                     boxShadow: '0 8px 20px rgba(0,0,0,0.06)'
                   }}
                 >
-                  <img 
-                    src={tech.logo} 
-                    alt={tech.name} 
+                  <img
+                    src={tech.logo}
+                    alt={tech.name}
                     style={logoStyle}
                     loading="eager"
                     decoding="async"
@@ -194,7 +194,7 @@ const Tools: React.FC = () => {
         </div>
 
         {/* All Technologies List */}
-        <motion.div 
+        <motion.div
           style={allToolsContainerStyle}
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -205,7 +205,7 @@ const Tools: React.FC = () => {
             <motion.div
               key={tool.name}
               style={toolBadgeStyle}
-              whileHover={{ 
+              whileHover={{
                 background: 'rgba(43, 42, 42, 0.15)',
                 color: '#fff',
                 scale: 1.05

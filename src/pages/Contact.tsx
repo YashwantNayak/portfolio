@@ -1,7 +1,11 @@
 import React, { useState } from 'react'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
+import emailjs from '@emailjs/browser'
 import PageWrapper from '../components/PageWrapper'
 import { palette, shadows } from '../theme'
+
+// Initialize EmailJS with public key
+emailjs.init('U7i2y4MxhwqvpWCBq')
 
 const formStyle: React.CSSProperties = {
   display: 'grid',
@@ -22,33 +26,80 @@ const Contact: React.FC = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    budget: 'Budget',
     message: ''
   })
   const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle')
+  const [feedbackMessage, setFeedbackMessage] = useState<string | null>(null)
+
+  const validateEmail = (email: string): boolean => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    return emailRegex.test(email)
+  }
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+
+    const name = formData.name.trim()
+    const email = formData.email.trim()
+    const message = formData.message.trim()
+
+    if (!name) {
+      setFeedbackMessage('Please enter your full name.')
+      setStatus('error')
+      return
+    }
+
+    if (!email || !validateEmail(email)) {
+      setFeedbackMessage('Please enter a valid email address.')
+      setStatus('error')
+      return
+    }
+
+    if (!message) {
+      setFeedbackMessage('Please enter your message.')
+      setStatus('error')
+      return
+    }
+
     setStatus('sending')
+    setFeedbackMessage(null)
 
-    // Create mailto link with form data
-    const subject = encodeURIComponent(`Project Inquiry from ${formData.name}`)
-    const body = encodeURIComponent(
-      `Name: ${formData.name}\nEmail: ${formData.email}\nBudget: ${formData.budget}\n\nMessage:\n${formData.message}`
-    )
-    const mailtoLink = `mailto:your-email@example.com?subject=${subject}&body=${body}`
+    try {
+      const templateParams = {
+        name: name,
+        email: email,
+        message: message,
+        from_name: name,
+        from_email: email,
+        reply_to: email
+      }
 
-    // Open email client
-    window.location.href = mailtoLink
+      await emailjs.send(
+        'service_bakbizp',
+        'template_smbsmuq',
+        templateParams,
+        {
+          publicKey: 'U7i2y4MxhwqvpWCBq'
+        }
+      )
 
-    // Show success message
-    setTimeout(() => {
       setStatus('success')
+      setFeedbackMessage(null)
+      setFormData({ name: '', email: '', message: '' })
+
       setTimeout(() => {
         setStatus('idle')
-        setFormData({ name: '', email: '', budget: 'Budget', message: '' })
-      }, 3000)
-    }, 500)
+      }, 5000)
+    } catch (error: any) {
+      console.error('EmailJS Error Object:', error)
+      const errDetail = error?.text || error?.message || (typeof error === 'string' ? error : '')
+      setStatus('error')
+      setFeedbackMessage(
+        errDetail
+          ? `EmailJS Error: ${errDetail}`
+          : 'Something went wrong. Please try again.'
+      )
+    }
   }
 
   return (
@@ -66,47 +117,59 @@ const Contact: React.FC = () => {
         <div style={formStyle}>
           <input
             style={inputStyle}
-            placeholder="Name"
+            placeholder="Full Name"
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
             required
+            disabled={status === 'sending'}
           />
           <input
             type="email"
             style={inputStyle}
-            placeholder="Email"
+            placeholder="Email Address"
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
             required
+            disabled={status === 'sending'}
           />
-          <select
-            style={inputStyle}
-            value={formData.budget}
-            onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
-            required
-          >
-            <option value="Budget" disabled>
-              Budget
-            </option>
-            <option>$5k - $10k</option>
-            <option>$10k - $25k</option>
-            <option>$25k+</option>
-          </select>
         </div>
         <textarea
           style={{ ...inputStyle, minHeight: 180 }}
-          placeholder="Project details"
+          placeholder="Message"
           value={formData.message}
           onChange={(e) => setFormData({ ...formData, message: e.target.value })}
           required
+          disabled={status === 'sending'}
         />
+
+        <AnimatePresence>
+          {status === 'error' && feedbackMessage && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              style={{
+                padding: '14px 20px',
+                borderRadius: 14,
+                fontSize: 15,
+                fontWeight: 500,
+                color: '#991b1b',
+                background: '#fee2e2',
+                border: '1px solid #fca5a5'
+              }}
+            >
+              {feedbackMessage}
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         <motion.button
           type="submit"
           style={{
             borderRadius: 999,
             border: 'none',
             padding: '16px 32px',
-            background: status === 'success' ? '#10b981' : palette.text,
+            background: palette.text,
             color: '#fff',
             fontSize: 16,
             letterSpacing: 1,
@@ -117,7 +180,7 @@ const Contact: React.FC = () => {
           whileTap={{ scale: status === 'sending' ? 1 : 0.95 }}
           disabled={status === 'sending'}
         >
-          {status === 'sending' ? 'Opening Email...' : status === 'success' ? 'Email Opened ✓' : 'Send Message'}
+          {status === 'sending' ? 'Sending...' : status === 'success' ? 'Message Sent ✓' : 'Send Message'}
         </motion.button>
       </motion.form>
     </PageWrapper>

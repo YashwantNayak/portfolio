@@ -1,0 +1,23 @@
+[
+  {
+    "id": "exp-1",
+    "company": "VNR seeds ptv. ltd.",
+    "role": "Software developer intern",
+    "date": "Feb 2026 — Present",
+    "summary": "I worked in software support, where I fixed bugs and improved UI across multiple projects. I also contributed innovative ideas for product marketing."
+  },
+  {
+    "id": "exp-2",
+    "company": "SetMyCart",
+    "role": "Software developer intern",
+    "date": "Jun 2025 - Aug 2025",
+    "summary": "Development of projects like SkyTM (Digital Wallet System), handling end-to-end design, development, and deployment using Angular, React.js, .NET, and Bootstrap."
+  },
+  {
+    "id": "exp-3",
+    "company": "SSIPMT (COE)",
+    "role": "Full Stack Developer (core team member)",
+    "date": "Jul 2025 — Present",
+    "summary": "Contributed to 8+ government projects currently live and used by citizens, developing web portals and applications for the Chhattisgarh government."
+  }
+]

@@ -1,0 +1,21 @@
+{
+  "personalInfo": {
+    "name": "Yashwant Nayak",
+    "title": "Software Engineer",
+    "bio": "I work as a Software Engineer, but my skillset goes way beyond just one domain. I'm also a Data Analyst, a Full-Stack Web & App Developer, and a UI/UX Designer who enjoys crafting clean interfaces and smooth user experiences.",
+    "email": "yashwant@example.com",
+    "location": "Raipur, India",
+    "resumeUrl": "/resume.pdf"
+  },
+  "socialLinks": {
+    "github": "https://github.com/yashwantnayak",
+    "linkedin": "https://linkedin.com/in/yashwantnayak",
+    "twitter": "https://twitter.com/yashwantnayak",
+    "email": "yashwant.nayak2023@ssipmt.com"
+  },
+  "stats": [
+    { "label": "Years Experience", "value": "0-1" },
+    { "label": "Projects", "value": "10+" },
+    { "label": "Technologies", "value": "10+" }
+  ]
+}

@@ -2,7 +2,7 @@ import React from 'react'
 import { motion } from 'framer-motion'
 import PageWrapper from '../components/PageWrapper'
 import ProjectModal from '../components/ProjectModal'
-import { projects } from '../content'
+import { projects } from '../data'
 
 const surfaceStyle: React.CSSProperties = {
   background: '#070707',

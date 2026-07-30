@@ -1,0 +1,51 @@
+{
+  "frontend": [
+    { "name": "React", "logo": "https://cdn.simpleicons.org/react" },
+    { "name": "Angular", "logo": "https://cdn.simpleicons.org/angular" },
+    { "name": "TypeScript", "logo": "https://cdn.simpleicons.org/typescript" },
+    { "name": "JavaScript", "logo": "https://cdn.simpleicons.org/javascript" },
+    { "name": "HTML5", "logo": "https://cdn.simpleicons.org/html5" },
+    { "name": "CSS3", "logo": "https://imgs.search.brave.com/7D1uAt3FTz7kD6XLJjfeG8dazQcmJ_gJjnPZi4SkmT4/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pY29u/LmljZXBhbmVsLmlv/L1RlY2hub2xvZ3kv/c3ZnL0NTUzMuc3Zn" },
+    { "name": "Flutter", "logo": "https://cdn.simpleicons.org/flutter" }
+  ],
+  "backend": [
+    { "name": "Node.js", "logo": "https://cdn.simpleicons.org/nodedotjs" },
+    { "name": "Express", "logo": "https://cdn.simpleicons.org/express/000000" },
+    { "name": "Python", "logo": "https://cdn.simpleicons.org/python" },
+    { "name": "Flask", "logo": "https://cdn.simpleicons.org/flask/000000" },
+    { "name": "MongoDB", "logo": "https://cdn.simpleicons.org/mongodb" },
+    { "name": "MySQL", "logo": "https://cdn.simpleicons.org/mysql" },
+    { "name": "Firebase", "logo": "https://www.svgrepo.com/show/303670/firebase-1-logo.svg" }
+  ],
+  "Programming_languages": [
+    { "name": "C", "logo": "https://imgs.search.brave.com/g4qCBV3wmAJK1V-IkpVcx7s33YufA8lTFHY44Jcj-w4/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly91cGxv/YWQud2lraW1lZGlh/Lm9yZy93aWtpcGVk/aWEvY29tbW9ucy9k/L2Q4L0NfTGFuZ3Vh/Z2VfTG9nby5zdmc" },
+    { "name": "C++", "logo": "https://cdn.simpleicons.org/cplusplus" },
+    { "name": "Java", "logo": "https://www.citypng.com/public/uploads/preview/hd-java-programming-logo-png-701751694771848sm650yaqjt.png" },
+    { "name": "Python", "logo": "https://cdn.simpleicons.org/python" },
+    { "name": "PHP", "logo": "https://cdn.simpleicons.org/php" },
+    { "name": "Dart", "logo": "https://cdn.simpleicons.org/dart" }
+  ],
+  "tools": [
+    { "name": "Git", "logo": "https://cdn.simpleicons.org/git" },
+    { "name": "GitHub", "logo": "https://cdn.simpleicons.org/github/000000" },
+    { "name": "Canva", "logo": "https://cdn.simpleicons.org/canva" },
+    { "name": "Figma", "logo": "https://cdn.simpleicons.org/figma" },
+    { "name": "VS Code", "logo": "https://logotyp.us/file/vs-code.svg" },
+    { "name": "Postman", "logo": "https://cdn.simpleicons.org/postman" },
+    { "name": "Docker", "logo": "https://cdn.simpleicons.org/docker" },
+    { "name": "Linux", "logo": "https://cdn.simpleicons.org/linux/000000" },
+    { "name": "n8n.io", "logo": "https://imgs.search.brave.com/s1iTkjlqH_p7wCqXIUpdwRJoL-vYJwJmfVICFWdToKI/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9jZG4u/YnJhbmRmZXRjaC5p/by9pZE82XzZ1cUo5/L3cvNjAwL2gvNjAw/L3RoZW1lL2Rhcmsv/aWNvbi5wbmc_Yz0x/YnhpZDY0TXVwN2Fj/emV3U0FZTVgmdD0x/NjY3NjMxMjUzNjY2" }
+  ],
+  "other": [
+    { "name": "Problem Solving", "logo": "https://cdn.simpleicons.org/leetcode/FFA116" },
+    { "name": "Data Structures", "logo": "https://cdn.simpleicons.org/datadog/632CA6" },
+    { "name": "Algorithms", "logo": "https://imgs.search.brave.com/zNirfIGCLTFKGW6xGvj8hh75evqSGur-2yv08yGrq4o/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9jZG4t/aWNvbnMtcG5nLmZy/ZWVwaWsuY29tLzI1/Ni81NTQwLzU1NDAz/NDcucG5nP3NlbXQ9/YWlzX3doaXRlX2xh/YmVs" },
+    { "name": "System Design", "logo": "https://cdn.simpleicons.org/diagramsdotnet/F08705" },
+    { "name": "UI/UX Design", "logo": "https://cdn.simpleicons.org/dribbble" },
+    { "name": "Version Control", "logo": "https://cdn.simpleicons.org/git" },
+    { "name": "npm", "logo": "https://cdn.simpleicons.org/npm" },
+    { "name": "Android studio", "logo": "https://cdn.simpleicons.org/androidstudio" },
+    { "name": "vs studio", "logo": "https://imgs.search.brave.com/xdK24CgijvddCuiPN_68UqYkccIEMpY9GDe_6_lQ9NQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly8xMDAw/bG9nb3MubmV0L3dw/LWNvbnRlbnQvdXBs/b2Fkcy8yMDIzLzA0/L1Zpc3VhbC1TdHVk/aW8tbG9nby01MDB4/MjgxLmpwZw" },
+    { "name": "Cloud Computing", "logo": "https://cdn.simpleicons.org/googlecloud/4285F4" }
+  ]
+}

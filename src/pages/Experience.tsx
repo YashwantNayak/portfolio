@@ -1,7 +1,7 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import PageWrapper from '../components/PageWrapper'
-import { experience } from '../content'
+import { experience } from '../data'
 import { palette } from '../theme'
 
 const lineStyle: React.CSSProperties = {
@@ -25,7 +25,7 @@ const Experience: React.FC = () => (
       <div style={{ display: 'flex', flexDirection: 'column', gap: 36 }}>
         {experience.map((item) => (
           <motion.article
-            key={item.company}
+            key={item.id}
             style={{
               padding: 24,
               borderRadius: 20,

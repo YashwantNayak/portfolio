@@ -2,7 +2,7 @@ import React from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import PageWrapper from '../components/PageWrapper'
-import { blogPosts } from '../content'
+import { blogPosts } from '../data'
 import { palette } from '../theme'
 
 const contentStyle: React.CSSProperties = {
