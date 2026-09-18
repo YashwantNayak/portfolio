@@ -23,6 +23,9 @@ export interface ExperienceItem {
   role: string
   date: string
   summary: string
+  location?: string
+  highlights?: string[]
+  memories?: string[]
 }
 
 export interface PersonalInfo {
