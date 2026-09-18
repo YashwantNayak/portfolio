@@ -102,35 +102,10 @@ const techNameStyle: React.CSSProperties = {
   opacity: 0.8
 }
 
-const allToolsContainerStyle: React.CSSProperties = {
-  width: '100%',
-  marginTop: 16,
-  padding: '32px 40px',
-  borderRadius: 24,
-  background: '#000000ff',
-  display: 'flex',
-  flexWrap: 'wrap',
-  gap: 12,
-  justifyContent: 'center',
-  alignItems: 'center'
-}
-
-const toolBadgeStyle: React.CSSProperties = {
-  padding: '8px 16px',
-  borderRadius: 8,
-  background: 'rgba(255,255,255,0.08)',
-  color: 'rgba(255,255,255,0.7)',
-  fontSize: 13,
-  fontWeight: 500,
-  border: '1px solid rgba(255,255,255,0.1)',
-  transition: 'all 0.3s ease'
-}
-
 const Tools: React.FC = () => {
   const [activeTabId, setActiveTabId] = useState('programming')
 
   const activeData = techByCategory[activeTabId] || []
-  const allTools = [...tools.Programming_languages, ...tools.frontend, ...tools.backend, ...tools.tools, ...tools.other]
 
   return (
     <PageWrapper
@@ -192,30 +167,6 @@ const Tools: React.FC = () => {
             ))}
           </motion.div>
         </div>
-
-        {/* All Technologies List */}
-        <motion.div
-          style={allToolsContainerStyle}
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
-          {allTools.map((tool) => (
-            <motion.div
-              key={tool.name}
-              style={toolBadgeStyle}
-              whileHover={{
-                background: 'rgba(43, 42, 42, 0.15)',
-                color: '#fff',
-                scale: 1.05
-              }}
-              transition={{ duration: 0.2 }}
-            >
-              {tool.name}
-            </motion.div>
-          ))}
-        </motion.div>
       </div>
     </PageWrapper>
   )
