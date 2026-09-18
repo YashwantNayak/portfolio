@@ -10,7 +10,40 @@ export default defineConfig({
       name: 'api-save-data',
       configureServer(server) {
         server.middlewares.use((req, res, next) => {
-          if (req.url === '/api/save-data' && req.method === 'POST') {
+            if (req.url === '/api/upload-resume' && req.method === 'POST') {
+              let body = ''
+              req.on('data', (chunk) => {
+                body += chunk.toString()
+              })
+              req.on('end', () => {
+                try {
+                  const { base64Data } = JSON.parse(body)
+                  if (!base64Data) {
+                    throw new Error('No base64 PDF data provided')
+                  }
+
+                  const cleanBase64 = base64Data.replace(/^data:application\/pdf;base64,/, '')
+                  const buffer = Buffer.from(cleanBase64, 'base64')
+
+                  const resumePath = path.join(__dirname, 'public', 'resume.pdf')
+                  const cvPath = path.join(__dirname, 'public', 'Yashwant CV.pdf')
+
+                  fs.writeFileSync(resumePath, buffer)
+                  fs.writeFileSync(cvPath, buffer)
+
+                  console.log(`[API Upload Resume] Updated resume.pdf on disk at: ${resumePath}`)
+
+                  res.statusCode = 200
+                  res.setHeader('Content-Type', 'application/json')
+                  res.end(JSON.stringify({ success: true, message: 'Successfully updated resume.pdf on disk!' }))
+                } catch (err: any) {
+                  console.error('[API Upload Resume Error]:', err)
+                  res.statusCode = 500
+                  res.setHeader('Content-Type', 'application/json')
+                  res.end(JSON.stringify({ success: false, error: err.message }))
+                }
+              })
+            } else if (req.url === '/api/save-data' && req.method === 'POST') {
             let body = ''
             req.on('data', (chunk) => {
               body += chunk.toString()

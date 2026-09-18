@@ -36,9 +36,61 @@ export const Admin: React.FC = () => {
   // Toast / Saving status
   const [toast, setToast] = useState<{ text: string; isError?: boolean } | null>(null)
   const [isSaving, setIsSaving] = useState(false)
+  const [isUploadingResume, setIsUploadingResume] = useState(false)
 
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const lineNumbersRef = useRef<HTMLDivElement>(null)
+  const pdfFileInputRef = useRef<HTMLInputElement>(null)
+
+  const handleResumeUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    if (file.type !== 'application/pdf' && !file.name.endsWith('.pdf')) {
+      showToast('Please select a valid .pdf file', true)
+      return
+    }
+
+    setIsUploadingResume(true)
+    showToast('Uploading resume PDF...')
+
+    const reader = new FileReader()
+    reader.onload = async () => {
+      try {
+        const base64Data = reader.result as string
+        const res = await fetch('/api/upload-resume', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ base64Data, filename: file.name })
+        })
+
+        if (res.ok) {
+          const data = await res.json()
+          if (data.success) {
+            showToast('Resume PDF updated successfully on disk! (public/resume.pdf)')
+          } else {
+            showToast(`Upload failed: ${data.error}`, true)
+          }
+        } else {
+          showToast('Server upload error. Verify Vite dev server is running.', true)
+        }
+      } catch (err: any) {
+        showToast(`Upload error: ${err.message}`, true)
+      } finally {
+        setIsUploadingResume(false)
+        if (pdfFileInputRef.current) {
+          pdfFileInputRef.current.value = ''
+        }
+      }
+    }
+
+    reader.onerror = () => {
+      setIsUploadingResume(false)
+      showToast('Failed to read PDF file', true)
+    }
+
+    reader.readAsDataURL(file)
+  }
 
   const handleScroll = (e: React.UIEvent<HTMLTextAreaElement>) => {
     if (lineNumbersRef.current) {
@@ -255,6 +307,21 @@ export const Admin: React.FC = () => {
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <input
+              type="file"
+              ref={pdfFileInputRef}
+              onChange={handleResumeUpload}
+              accept="application/pdf"
+              style={{ display: 'none' }}
+            />
+            <button
+              type="button"
+              onClick={() => pdfFileInputRef.current?.click()}
+              disabled={isUploadingResume}
+              style={styles.headerOutlineBtn}
+            >
+              {isUploadingResume ? 'Uploading...' : '📄 Upload Resume PDF'}
+            </button>
             <a href="/" target="_blank" rel="noopener noreferrer" style={styles.headerGhostBtn}>
               View Site
             </a>
@@ -300,6 +367,23 @@ export const Admin: React.FC = () => {
             </div>
 
             <div style={{ marginTop: 'auto', paddingTop: 16 }}>
+              <div style={{ marginBottom: 14, padding: 12, borderRadius: 14, background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)' }}>
+                <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: 0.8, color: 'rgba(255,255,255,0.5)', marginBottom: 4 }}>
+                  RESUME MANAGEMENT
+                </div>
+                <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.4)', marginBottom: 10, lineHeight: 1.3 }}>
+                  Upload a new PDF to update <strong style={{ color: '#fff' }}>public/resume.pdf</strong>.
+                </div>
+                <button
+                  type="button"
+                  onClick={() => pdfFileInputRef.current?.click()}
+                  disabled={isUploadingResume}
+                  style={{ ...styles.headerOutlineBtn, width: '100%', textAlign: 'center', boxSizing: 'border-box' }}
+                >
+                  {isUploadingResume ? 'Uploading...' : 'Upload Resume PDF'}
+                </button>
+              </div>
+
               <button onClick={handleResetDefaults} style={styles.resetOutlinedBtn}>
                 Reset Defaults
               </button>
