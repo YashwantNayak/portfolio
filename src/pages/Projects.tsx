@@ -1,8 +1,8 @@
 import React from 'react'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import PageWrapper from '../components/PageWrapper'
 import ProjectModal from '../components/ProjectModal'
-import { projects } from '../data'
+import { usePortfolioData } from '../data'
 
 const surfaceStyle: React.CSSProperties = {
   background: '#070707',
@@ -27,11 +27,20 @@ const glowStyle: React.CSSProperties = {
   pointerEvents: 'none'
 }
 
+const headerRowStyle: React.CSSProperties = {
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'flex-start',
+  gap: 24,
+  marginBottom: 42,
+  flexWrap: 'wrap'
+}
+
 const headingBlockStyle: React.CSSProperties = {
   display: 'flex',
   flexDirection: 'column',
   gap: 18,
-  marginBottom: 42
+  maxWidth: 680
 }
 
 const headingStyle: React.CSSProperties = {
@@ -54,6 +63,23 @@ const leadStyle: React.CSSProperties = {
   lineHeight: 1.6
 }
 
+const viewAllButtonStyle: React.CSSProperties = {
+  display: 'inline-flex',
+  alignItems: 'center',
+  gap: 8,
+  padding: '12px 24px',
+  borderRadius: 999,
+  border: '1px solid rgba(255,255,255,0.15)',
+  background: 'rgba(255,255,255,0.06)',
+  color: '#ffffff',
+  fontSize: 14,
+  fontWeight: 600,
+  cursor: 'pointer',
+  backdropFilter: 'blur(10px)',
+  transition: 'all 0.3s ease',
+  marginTop: 8
+}
+
 const carouselContainerStyle: React.CSSProperties = {
   position: 'relative'
 }
@@ -70,10 +96,10 @@ const listStyle: React.CSSProperties = {
   msOverflowStyle: 'none' // Hide scrollbar for IE/Edge
 }
 
+/* Fixed navButtonStyle without transform: translateY(-50%) to prevent Framer Motion hover override jumps */
 const navButtonStyle: React.CSSProperties = {
   position: 'absolute',
   top: '50%',
-  transform: 'translateY(-50%)',
   width: 48,
   height: 48,
   borderRadius: '50%',
@@ -84,8 +110,7 @@ const navButtonStyle: React.CSSProperties = {
   alignItems: 'center',
   justifyContent: 'center',
   cursor: 'pointer',
-  zIndex: 10,
-  transition: 'all 0.3s ease'
+  zIndex: 10
 }
 
 const navButtonLeftStyle: React.CSSProperties = {
@@ -115,19 +140,18 @@ const cardStyle: React.CSSProperties = {
   justifyContent: 'space-between'
 }
 
-const arrowButtonStyle: React.CSSProperties = {
-  position: 'absolute',
-  top: 20,
-  right: 20,
-  width: 40,
-  height: 40,
-  borderRadius: '50%',
-  border: '1px solid rgba(255,255,255,0.08)',
+const gridCardStyle: React.CSSProperties = {
+  position: 'relative',
   display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  background: 'rgba(255,255,255,0.08)',
-  transition: 'all 0.3s ease'
+  flexDirection: 'column',
+  gap: 16,
+  borderRadius: 28,
+  padding: '24px 24px',
+  border: '1px solid rgba(255,255,255,0.08)',
+  background: 'rgba(255,255,255,0.015)',
+  cursor: 'pointer',
+  justifyContent: 'space-between',
+  minHeight: 380
 }
 
 const previewShellStyle: React.CSSProperties = {
@@ -166,9 +190,9 @@ const indexStyle: React.CSSProperties = {
 }
 
 const cardDescStyle: React.CSSProperties = {
-  margin: 20,
+  margin: '12px 0',
   color: 'rgba(255,255,255,0.7)',
-  fontSize: 15,
+  fontSize: 14,
   lineHeight: 1.5
 }
 
@@ -187,23 +211,18 @@ const tagStyle: React.CSSProperties = {
   color: 'rgba(255,255,255,0.75)'
 }
 
-const ArrowIcon: React.FC = () => (
-  <svg width={22} height={22} viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth={1.8}>
-    <path d="M7 17L17 7M9 7H17V15" />
-  </svg>
-)
-
 const Projects: React.FC = () => {
+  const { projects } = usePortfolioData()
   const [selectedProject, setSelectedProject] = React.useState<typeof projects[0] | null>(null)
   const [currentPage, setCurrentPage] = React.useState(0)
+  const [isViewAll, setIsViewAll] = React.useState(false)
   const scrollContainerRef = React.useRef<HTMLDivElement>(null)
 
-  // Logic for 3 dots with 8 items (overlapping pages)
+  // Logic for 3 dots with overlapping pages
   const totalPages = 3
 
   const scroll = (direction: 'left' | 'right') => {
     if (scrollContainerRef.current) {
-      // Scroll by half the container width to visit the middle state
       const scrollAmount = scrollContainerRef.current.clientWidth / 2
       const newScrollLeft = direction === 'left'
         ? scrollContainerRef.current.scrollLeft - scrollAmount
@@ -222,9 +241,7 @@ const Projects: React.FC = () => {
       const maxScroll = scrollWidth - clientWidth
       if (maxScroll <= 0) return
 
-      // Calculate progress 0 to 1
       const progress = scrollLeft / maxScroll
-      // Map to page index (0 to totalPages - 1)
       const page = Math.round(progress * (totalPages - 1))
       setCurrentPage(page)
     }
@@ -234,7 +251,6 @@ const Projects: React.FC = () => {
     if (scrollContainerRef.current) {
       const { scrollWidth, clientWidth } = scrollContainerRef.current
       const maxScroll = scrollWidth - clientWidth
-      // Map page index to scroll position
       const scrollPos = (page / (totalPages - 1)) * maxScroll
 
       scrollContainerRef.current.scrollTo({
@@ -246,123 +262,223 @@ const Projects: React.FC = () => {
 
   return (
     <>
+      <style>{`
+        .projects-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 24px;
+          width: 100%;
+        }
+        @media (max-width: 1024px) {
+          .projects-grid {
+            grid-template-columns: repeat(2, 1fr);
+          }
+        }
+        @media (max-width: 640px) {
+          .projects-grid {
+            grid-template-columns: 1fr;
+          }
+        }
+        div::-webkit-scrollbar {
+          display: none;
+        }
+      `}</style>
       <PageWrapper title="" sectionId="projects" frameless>
         <section style={surfaceStyle}>
           <div style={glowStyle} />
-          <div style={headingBlockStyle}>
-            <h2 style={headingStyle}>
-              RECENT
-              <br />
-              <span style={ghostTextStyle}>PROJECTS</span>
-            </h2>
-            <p style={leadStyle}>
-              A curated stream of client launches, platforms, and experimental builds that lean into
-              modern development practices and user-centric design.
-            </p>
+          
+          {/* Header Row with Heading + View All Button in Top Right Corner */}
+          <div
+            style={{
+              ...headerRowStyle,
+              marginBottom: isViewAll ? 20 : 42,
+              justifyContent: isViewAll ? 'flex-end' : 'space-between'
+            }}
+          >
+            {!isViewAll && (
+              <div style={headingBlockStyle}>
+                <h2 style={headingStyle}>
+                  RECENT
+                  <br />
+                  <span style={ghostTextStyle}>PROJECTS</span>
+                </h2>
+                <p style={leadStyle}>
+                  A curated stream of client launches, platforms, and experimental builds that lean into modern development practices and user-centric design.
+                </p>
+              </div>
+            )}
+
+            <motion.button
+              type="button"
+              onClick={() => setIsViewAll(!isViewAll)}
+              style={viewAllButtonStyle}
+              whileHover={{ scale: 1.05, background: 'rgba(255,255,255,0.15)', borderColor: 'rgba(255,255,255,0.3)' }}
+              whileTap={{ scale: 0.95 }}
+            >
+              {isViewAll ? '← Show Slider' : 'View All Projects →'}
+            </motion.button>
           </div>
 
-          <div style={carouselContainerStyle}>
-            {/* Left Navigation Button */}
-            <motion.div
-              style={navButtonLeftStyle}
-              onClick={() => scroll('left')}
-              whileHover={{ background: 'rgba(255,255,255,0.2)', scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2">
-                <path d="M15 18l-6-6 6-6" />
-              </svg>
-            </motion.div>
-
-            {/* Right Navigation Button */}
-            <motion.div
-              style={navButtonRightStyle}
-              onClick={() => scroll('right')}
-              whileHover={{ background: 'rgba(255,255,255,0.2)', scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2">
-                <path d="M9 18l6-6-6-6" />
-              </svg>
-            </motion.div>
-
-            <div
-              ref={scrollContainerRef}
-              style={listStyle}
-              onScroll={handleScroll}
-            >
-              <style>
-                {`
-                  div::-webkit-scrollbar {
-                    display: none;
-                  }
-                `}
-              </style>
-              {projects.map((project, index) => (
+          <AnimatePresence mode="wait">
+            {!isViewAll ? (
+              /* --- SLIDER / CAROUSEL VIEW --- */
+              <motion.div
+                key="carousel-view"
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -15 }}
+                transition={{ duration: 0.3 }}
+                style={carouselContainerStyle}
+              >
+                {/* Left Navigation Button - Fixed Y position to prevent downward hover shift */}
                 <motion.div
-                  key={project.id}
-                  style={cardStyle}
-                  whileHover={{ background: 'rgba(255,255,255,0.05)', translateY: -4 }}
-                  transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-                  onClick={() => setSelectedProject(project)}
+                  style={navButtonLeftStyle}
+                  onClick={() => scroll('left')}
+                  initial={{ y: '-50%' }}
+                  animate={{ y: '-50%' }}
+                  whileHover={{ background: 'rgba(255,255,255,0.25)', scale: 1.1, y: '-50%' }}
+                  whileTap={{ scale: 0.95, y: '-50%' }}
+                  transition={{ duration: 0.2 }}
+                  role="button"
+                  aria-label="Scroll Left"
                 >
-                  {/* <div style={arrowButtonStyle}>
-                    <ArrowIcon />
-                  </div> */}
-                  <div style={previewShellStyle}>
-                    <img
-                      src={project.images[0]}
-                      alt={project.title}
-                      style={{
-                        width: '100%',
-                        height: '100%',
-                        objectFit: 'cover'
-                      }}
-                    />
-                  </div>
-                  <div style={detailsStyle}>
-                    <div style={titleRowStyle}>
-                      <h3 style={cardTitleStyle}>{project.title}</h3>
-                      <span style={indexStyle}>{String(index + 1).padStart(2, '0')}</span>
-                    </div>
-                    <p style={cardDescStyle}>{project.shortDesc}</p>
-                    <div style={tagRowStyle}>
-                      {project.tags.map((tag) => (
-                        <span key={tag} style={tagStyle}>
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2">
+                    <path d="M15 18l-6-6 6-6" />
+                  </svg>
                 </motion.div>
-              ))}
-            </div>
 
-            {/* Dot Navigation */}
-            <div style={{
-              display: 'flex',
-              justifyContent: 'center',
-              gap: 8,
-              marginTop: 20
-            }}>
-              {Array.from({ length: totalPages }).map((_, index) => (
+                {/* Right Navigation Button - Fixed Y position to prevent downward hover shift */}
                 <motion.div
-                  key={index}
-                  onClick={() => scrollToPage(index)}
-                  style={{
-                    width: currentPage === index ? 24 : 8,
-                    height: 8,
-                    borderRadius: 4,
-                    background: currentPage === index ? '#fff' : 'rgba(255,255,255,0.2)',
-                    cursor: 'pointer',
-                    transition: 'all 0.3s ease'
-                  }}
-                  whileHover={{ scale: 1.2 }}
-                  whileTap={{ scale: 0.9 }}
-                />
-              ))}
-            </div>
-          </div>
+                  style={navButtonRightStyle}
+                  onClick={() => scroll('right')}
+                  initial={{ y: '-50%' }}
+                  animate={{ y: '-50%' }}
+                  whileHover={{ background: 'rgba(255,255,255,0.25)', scale: 1.1, y: '-50%' }}
+                  whileTap={{ scale: 0.95, y: '-50%' }}
+                  transition={{ duration: 0.2 }}
+                  role="button"
+                  aria-label="Scroll Right"
+                >
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2">
+                    <path d="M9 18l6-6-6-6" />
+                  </svg>
+                </motion.div>
+
+                <div
+                  ref={scrollContainerRef}
+                  style={listStyle}
+                  onScroll={handleScroll}
+                >
+                  {projects.map((project, index) => (
+                    <motion.div
+                      key={project.id}
+                      style={cardStyle}
+                      whileHover={{ background: 'rgba(255,255,255,0.05)', translateY: -4 }}
+                      transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                      onClick={() => setSelectedProject(project)}
+                    >
+                      <div style={previewShellStyle}>
+                        <img
+                          src={project.images[0]}
+                          alt={project.title}
+                          style={{
+                            width: '100%',
+                            height: '100%',
+                            objectFit: 'cover'
+                          }}
+                        />
+                      </div>
+                      <div style={detailsStyle}>
+                        <div style={titleRowStyle}>
+                          <h3 style={cardTitleStyle}>{project.title}</h3>
+                          <span style={indexStyle}>{String(index + 1).padStart(2, '0')}</span>
+                        </div>
+                        <p style={cardDescStyle}>{project.shortDesc}</p>
+                        <div style={tagRowStyle}>
+                          {project.tags.map((tag) => (
+                            <span key={tag} style={tagStyle}>
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+
+                {/* Dot Navigation */}
+                <div style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  gap: 8,
+                  marginTop: 20
+                }}>
+                  {Array.from({ length: totalPages }).map((_, index) => (
+                    <motion.div
+                      key={index}
+                      onClick={() => scrollToPage(index)}
+                      style={{
+                        width: currentPage === index ? 24 : 8,
+                        height: 8,
+                        borderRadius: 4,
+                        background: currentPage === index ? '#fff' : 'rgba(255,255,255,0.2)',
+                        cursor: 'pointer',
+                        transition: 'all 0.3s ease'
+                      }}
+                      whileHover={{ scale: 1.2 }}
+                      whileTap={{ scale: 0.9 }}
+                    />
+                  ))}
+                </div>
+              </motion.div>
+            ) : (
+              /* --- ALL PROJECTS GRID VIEW (3 per row) --- */
+              <motion.div
+                key="grid-view"
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -15 }}
+                transition={{ duration: 0.3 }}
+                className="projects-grid"
+              >
+                {projects.map((project, index) => (
+                  <motion.div
+                    key={project.id}
+                    style={gridCardStyle}
+                    whileHover={{ background: 'rgba(255,255,255,0.05)', translateY: -4 }}
+                    transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                    onClick={() => setSelectedProject(project)}
+                  >
+                    <div style={previewShellStyle}>
+                      <img
+                        src={project.images[0]}
+                        alt={project.title}
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'cover'
+                        }}
+                      />
+                    </div>
+                    <div style={detailsStyle}>
+                      <div style={titleRowStyle}>
+                        <h3 style={cardTitleStyle}>{project.title}</h3>
+                        <span style={indexStyle}>{String(index + 1).padStart(2, '0')}</span>
+                      </div>
+                      <p style={cardDescStyle}>{project.shortDesc}</p>
+                      <div style={tagRowStyle}>
+                        {project.tags.map((tag) => (
+                          <span key={tag} style={tagStyle}>
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </motion.div>
+            )}
+          </AnimatePresence>
         </section>
       </PageWrapper>
 
@@ -375,3 +491,4 @@ const Projects: React.FC = () => {
 }
 
 export default Projects
+
