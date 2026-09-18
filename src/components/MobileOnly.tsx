@@ -23,8 +23,8 @@ const MobileOnly: React.FC = () => {
           {/* Profile Image */}
           <div style={styles.profileImage}>
             <img
-              src="/yn_mobile.png"
-              alt="Profile"
+              src="/mobileimg.png"
+              alt="Yashwant Nayak"
               style={styles.img}
             />
           </div>
@@ -99,54 +99,46 @@ const styles = {
     boxSizing: 'border-box' as const,
   },
   profileImage: {
-    marginTop: '-100px',
-    width: '220px',
-    height: '300px',
-    // borderRadius: '50%',
-    // overflow: 'hidden' as const,
-    // border: '4px solid #374151',
-    // boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
-    // marginBottom: '16px',
+    marginTop: '-85px',
+    width: '255px',
+    height: '255px',
+    display: 'flex',
+    marginLeft:'-6px',
+    // alignItems: 'center',
+    // justifyContent: 'center',
+    marginBottom: '32px',
   },
   img: {
     width: '100%',
     height: '100%',
-    objectFit: 'cover' as const,
+    objectFit: 'contain' as const,
+    filter: 'drop-shadow(0 12px 24px rgba(0, 0, 0, 0.5))',
   },
   name: {
-    fontSize: '2.1em',
+    fontSize: '2rem',
     fontWeight: 'bold' as const,
     color: 'white',
     margin: 0,
+    letterSpacing: '-0.02em',
   },
   role: {
     fontSize: '0.875rem',
     color: '#bababaff',
     marginTop: '4px',
+    letterSpacing: '0.04em',
   },
   bio: {
     color: '#8c8c8dff',
     fontSize: '0.875rem',
-    marginTop: '16px',
+    marginTop: '14px',
     lineHeight: '1.5',
-  },
-  card: {
-    width: '100%',
-    backgroundColor: '#1a1a1a',
-    border: '1px solid #1f1f1f',
-    marginTop: '24px',
-    borderRadius: '8px',
-  },
-  cardContent: {
-    display: 'flex',
-    justifyContent: 'space-around',
-    padding: '10px 0',
+    maxWidth: '280px',
   },
   socialContainer: {
     display: 'flex',
-    gap: '10px',
+    gap: '12px',
     justifyContent: 'center',
-    marginTop: '10px',
+    marginTop: '16px',
   },
   iconWrapper: {
     width: '40px',
@@ -164,14 +156,16 @@ const styles = {
     color: '#000000',
   },
   button: {
-    marginTop: '34px',
-    // marginLeft: '90px',
+    marginTop: '26px',
     width: '100%',
+    maxWidth: '260px',
     padding: '12px 0',
     borderRadius: '50px',
     backgroundColor: 'white',
     color: 'black',
-    fontWeight: '500',
+    fontWeight: '600' as const,
+    fontSize: '0.9rem',
+    cursor: 'pointer',
   },
 }
 
