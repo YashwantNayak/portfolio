@@ -124,7 +124,22 @@ const Thoughts: React.FC = () => {
       subtitle="View and download my official Curriculum Vitae."
     >
       <div style={{ maxWidth: 960, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 24 }}>
-        {/* Top Header Card: Title & Download Button */}
+        {/* PDF Reflection Card (Top) */}
+        <div
+          style={{
+            borderRadius: radii.lg || 24,
+            background: '#ffffff',
+            border: '1px solid rgba(0,0,0,0.08)',
+            boxShadow: shadows.soft,
+            padding: '20px',
+            boxSizing: 'border-box',
+            overflow: 'hidden'
+          }}
+        >
+          <PdfCanvasViewer pdfUrl="/resume.pdf" />
+        </div>
+
+        {/* Header Card: Title & Download Button (Bottom, below PDF viewer) */}
         <div
           style={{
             borderRadius: radii.lg || 24,
@@ -173,21 +188,6 @@ const Thoughts: React.FC = () => {
             <IconDownload />
             Download Resume
           </motion.a>
-        </div>
-
-        {/* Separate Bottom Card for PDF Reflection */}
-        <div
-          style={{
-            borderRadius: radii.lg || 24,
-            background: '#ffffff',
-            border: '1px solid rgba(0,0,0,0.08)',
-            boxShadow: shadows.soft,
-            padding: '20px',
-            boxSizing: 'border-box',
-            overflow: 'hidden'
-          }}
-        >
-          <PdfCanvasViewer pdfUrl="/resume.pdf" />
         </div>
       </div>
     </PageWrapper>
