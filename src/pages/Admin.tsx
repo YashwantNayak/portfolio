@@ -7,9 +7,8 @@ import {
   type DataFileName
 } from '../data/dataStore'
 
-const ADMIN_USER_ID = import.meta.env.VITE_ADMIN_USER_ID || 'admin'
-const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD || 'admin123'
-
+const ADMIN_USER_ID = (import.meta as any).env?.VITE_ADMIN_USER_ID 
+const ADMIN_PASSWORD = (import.meta as any).env?.VITE_ADMIN_PASSWORD 
 const AVAILABLE_FILES: { name: DataFileName; label: string; description: string }[] = [
   { name: 'projects.json', label: 'projects.json', description: 'Projects list & links' },
   { name: 'experience.json', label: 'experience.json', description: 'Work experience history' },
