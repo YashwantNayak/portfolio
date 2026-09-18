@@ -91,17 +91,17 @@ const Experience: React.FC = () => {
                   <span
                     style={{
                       position: 'absolute',
-                      left: -19,
-                      top: 42.5,
-                      transform: 'translate(-50%, -50%)',
-                      width: 14,
-                      height: 14,
+                      left: -28,
+                      top: 33,
+                      width: 18,
+                      height: 18,
+                      boxSizing: 'border-box',
                       borderRadius: '50%',
                       background: isExpanded ? '#000000' : '#ffffff',
-                      border: isExpanded ? '3px solid #000000' : '3px solid rgba(0,0,0,0.3)',
-                      boxShadow: '0 0 0 4px #ffffff, 0 2px 6px rgba(0,0,0,0.08)',
+                      border: isExpanded ? '4px solid #000000' : '4px solid #8c8c8c',
+                      boxShadow: '0 0 0 3px #ffffff',
                       transition: 'all 0.3s ease',
-                      zIndex: 2
+                      zIndex: 5
                     }}
                   />
 
@@ -155,7 +155,24 @@ const Experience: React.FC = () => {
                         transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
                         style={{ overflow: 'hidden' }}
                       >
-                        <div style={{ paddingTop: 20, marginTop: 20, borderTop: '1px solid rgba(0,0,0,0.06)' }}>
+                        <div style={{ paddingTop: 24, marginTop: 20, borderTop: '1px solid rgba(0,0,0,0.06)' }}>
+                          {/* Key Achievements List */}
+                          {item.highlights && item.highlights.length > 0 && (
+                            <div style={{ marginBottom: 24 }}>
+                              <h4 style={{ margin: '0 0 12px', fontSize: 13, fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase', color: 'rgba(0,0,0,0.4)' }}>
+                                Key Achievements & Responsibilities
+                              </h4>
+                              <ul style={{ margin: 0, paddingLeft: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 8 }}>
+                                {item.highlights.map((highlight, idx) => (
+                                  <li key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: 10, fontSize: 14, color: 'rgba(0,0,0,0.75)', lineHeight: 1.5 }}>
+                                    <span style={{ color: 'rgba(0,0,0,0.4)', fontWeight: 700, fontSize: 14, marginTop: 1 }}>•</span>
+                                    <span>{highlight}</span>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          )}
+
                           {/* Memories & Photos Gallery Grid (3 photos per row) */}
                           {item.memories && item.memories.length > 0 && (
                             <div>
@@ -279,5 +296,7 @@ const Experience: React.FC = () => {
 }
 
 export default Experience
+
+
 
 
