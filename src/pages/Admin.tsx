@@ -7,8 +7,8 @@ import {
   type DataFileName
 } from '../data/dataStore'
 
-const ADMIN_USER_ID = 'admin'
-const ADMIN_PASSWORD = 'admin123'
+const ADMIN_USER_ID = import.meta.env.VITE_ADMIN_USER_ID || 'admin'
+const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD || 'admin123'
 
 const AVAILABLE_FILES: { name: DataFileName; label: string; description: string }[] = [
   { name: 'projects.json', label: 'projects.json', description: 'Projects list & links' },
@@ -113,7 +113,7 @@ export const Admin: React.FC = () => {
       setLoginError('')
       showToast('Authenticated as Admin')
     } else {
-      setLoginError('Invalid User ID or Password (Default: admin / admin123)')
+      setLoginError('Invalid User ID or Password')
     }
   }
 
@@ -205,10 +205,6 @@ export const Admin: React.FC = () => {
               Sign In →
             </button>
           </form>
-
-          <p style={styles.hintText}>
-            Default: User ID <strong style={{ color: '#fff' }}>admin</strong> · Password <strong style={{ color: '#fff' }}>admin123</strong>
-          </p>
         </motion.div>
       </div>
     )
