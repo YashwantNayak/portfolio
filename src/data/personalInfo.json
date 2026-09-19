@@ -14,8 +14,17 @@
     "email": "yashwant.nayak2023@ssipmt.com"
   },
   "stats": [
-    { "label": "Years Experience", "value": "0-1" },
-    { "label": "Projects", "value": "10+" },
-    { "label": "Technologies", "value": "10+" }
+    {
+      "label": "Years Experience",
+      "value": "0-1"
+    },
+    {
+      "label": "Projects",
+      "value": "10+"
+    },
+    {
+      "label": "Technologies",
+      "value": "10+"
+    }
   ]
 }
