@@ -1,35 +1,116 @@
 [
   {
     "id": "pid-1",
-    "title": "Greeen Palna- Government Plantation Monitoring System",
-    "shortDesc": "Comprehensive MIS platform with cookie-less authentication and analytics dashboards.",
-    "description": "Developed a comprehensive Management Information System for local government bodies with advanced features including Google and Facebook login integration, file management, and real-time analytics dashboards. The platform handles time-based data uploads and event management with a focus on performance and security.",
+    "title": "Marketplace SaaS",
+    "shortDesc": "Multi-tenant SaaS marketplace for centralized vendor + storefront.",
+    "description": "Engineered a scalable multi-tenant e-commerce SaaS platform using React.js, Node.js, Express.js, PostgreSQL, and Prisma ORM. The platform enables multiple vendors to operate independently under a centralized marketplace architecture, with vendor management, product cataloging, role-based access control, relational data management, and dynamic storefront rendering. Built the backend using a monorepo architecture and integrated RESTful APIs with Redux Toolkit Query for efficient frontend-backend communication.",
     "tags": [
-      "React",
+      "React.js",
       "Node.js",
-      "MongoDB",
-      "Analytics"
+      "Express.js",
+      "PostgreSQL",
+      "Prisma",
+      "Redis"
     ],
     "role": "Full Stack Developer",
-    "year": "2024",
+    "year": "2026",
     "images": [
-      "/projects/green_poster.png",
-      "/projects/mis-2.jpg"
+      "https://ik.imagekit.io/n7cbihbyj/3.png",
+      "https://ik.imagekit.io/n7cbihbyj/4.png"
     ],
     "links": {
-      "live": "https://example.com",
-      "repo": "https://github.com/example"
+      "live": "https://emilogifting.in",
+      "repo": ""
     },
     "accent": [
-      "#93c2f9ff",
-      "#e0e7ff"
+      "#7C3AED",
+      "#DDD6FE"
     ],
     "highlights": [
-      "Implemented cookie-less authentication system",
-      "Built real-time analytics dashboards",
-      "Integrated Google and Facebook OAuth",
-      "Developed CRUD operations with file management",
-      "Ensured cross-browser compatibility and responsiveness"
+      "Engineered a scalable multi-tenant e-commerce SaaS platform",
+      "Implemented centralized vendor management and product cataloging",
+      "Built dynamic storefront rendering for individual vendors",
+      "Implemented secure role-based access control across the platform",
+      "Designed relational data management using PostgreSQL and Prisma ORM",
+      "Built RESTful APIs using Node.js and Express.js",
+      "Integrated Redux Toolkit and RTK Query for frontend state and API management",
+      "Worked on vendor onboarding and core marketplace workflows",
+      "Integrated NATS, Redis, and BullMQ for messaging and background processing",
+      "Supported Razorpay, Shiprocket, and Socket.IO integrations",
+      "Contributed to ONDC integration and end-to-end platform testing"
+    ]
+  },
+  {
+    "id": "pid-2",
+    "title": "Emilo Gifting",
+    "shortDesc": "Vendor and admin e-commerce platform for management & monitoring.",
+    "description": "Developed a full-stack vendor management platform for Emilo Gifting using React and Express.js. The application enables vendors to manage products, inventory, orders, and transactions through an intuitive dashboard. It also includes an admin panel for overseeing vendors, products, categories, orders, and platform operations. The system focuses on secure authentication, efficient product management, responsive UI, and seamless business workflows.",
+    "tags": [
+      "React",
+      "Express.js",
+      "Node.js",
+      "MongoDB",
+      "NATs",
+      "Redis"
+    ],
+    "role": "Full Stack Developer",
+    "year": "2026",
+    "images": [
+      "https://ik.imagekit.io/n7cbihbyj/Untitled%20design%20(1).png",
+      "/projects/emilogifting-2.png"
+    ],
+    "links": {
+      "live": "https://emilogifting.in",
+      "repo": ""
+    },
+    "accent": [
+      "#7C3AED",
+      "#DDD6FE"
+    ],
+    "highlights": [
+      "Developed vendor dashboard for product and inventory management",
+      "Built admin panel for vendors, products, categories, and order management",
+      "Implemented secure authentication and role-based access control",
+      "Managed order lifecycle and transaction tracking",
+      "Created responsive dashboards using React and Express.js",
+      "Integrated REST APIs for seamless frontend-backend communication",
+      "Optimized application performance and user experience"
+    ]
+  },
+  {
+    "id": "pid-2",
+    "title": "Green Palna",
+    "shortDesc": "A government web platform for managing plantation distribution, tracking saplings",
+    "description": "Developed the frontend of the Green Palna web platform using React for the District Magistrate's environmental initiative. The system digitizes the distribution of five plant saplings to pregnant women by managing beneficiary registration, plantation records, verification, and administrative workflows. The backend was built with PHP and MySQL, enabling secure data management, form processing, and efficient record tracking through an admin dashboard. The platform streamlined paper-based operations into a centralized digital system for government officials. The Green Palna initiative focuses on promoting environmental sustainability by encouraging mothers to nurture saplings alongside their newborns. :contentReference[oaicite:0]{index=0}",
+    "tags": [
+      "React",
+      "Core PHP",
+      "MySQL DB",
+      "Rockey linux",
+      "Government Project"
+    ],
+    "role": "Frontend Developer",
+    "year": "2025",
+    "images": [
+      "/projects/green_poster.png",
+      "/projects/green-palna-2.jpg"
+    ],
+    "links": {
+      "live": "https://gpy.ssipmt.in/admin/login",
+      "repo": ""
+    },
+    "accent": [
+      "#22C55E",
+      "#DCFCE7"
+    ],
+    "highlights": [
+      "Developed the frontend using React",
+      "Built responsive forms for beneficiary registration",
+      "Integrated frontend with PHP REST APIs",
+      "Managed plantation and beneficiary records",
+      "Implemented admin dashboard for data management",
+      "Used MySQL for secure government data storage",
+      "Digitized government workflows for environmental initiatives"
     ]
   },
   {
@@ -90,157 +171,6 @@
       "Implemented interactive learning modules",
       "Built user authentication and authorization",
       "Optimized database queries for performance"
-    ]
-  },
-  {
-    "id": "portfolio-website",
-    "title": "Personal Portfolio",
-    "shortDesc": "Modern portfolio with motion-first design and cinematic interactions.",
-    "description": "A cinematic portfolio website with motion-first storytelling, built with React and Framer Motion. Features smooth animations, responsive design, and an elegant dark-light theme combination.",
-    "tags": [
-      "React",
-      "Framer Motion",
-      "UI/UX"
-    ],
-    "role": "Designer & Developer",
-    "year": "2025",
-    "images": [
-      "/projects/portfolio-1.jpg"
-    ],
-    "links": {
-      "live": "https://example.com",
-      "repo": "https://github.com/example"
-    },
-    "accent": [
-      "#fdf3ff",
-      "#f5e6ff"
-    ],
-    "highlights": [
-      "Implemented smooth scroll animations",
-      "Created custom typing animation component",
-      "Designed glassmorphic navigation",
-      "Built responsive layout system"
-    ]
-  },
-  {
-    "id": "task-management-app",
-    "title": "Task Management System",
-    "shortDesc": "Real-time collaborative task manager with team features and notifications.",
-    "description": "Developed a real-time task management application with collaborative features, drag-and-drop interface, and instant notifications. Built with React, Socket.io, and Firebase for real-time updates.",
-    "tags": [
-      "React",
-      "Socket.io",
-      "Firebase",
-      "Real-time"
-    ],
-    "role": "Full Stack Developer",
-    "year": "2024",
-    "images": [
-      "/projects/task-1.jpg"
-    ],
-    "links": {
-      "live": "https://example.com",
-      "repo": "https://github.com/example"
-    },
-    "accent": [
-      "#fff0f5",
-      "#ffe4e6"
-    ],
-    "highlights": [
-      "Implemented real-time collaboration features",
-      "Built drag-and-drop task interface",
-      "Integrated push notifications",
-      "Designed team management system"
-    ]
-  },
-  {
-    "id": "weather-dashboard",
-    "title": "Weather Analytics Dashboard",
-    "shortDesc": "Interactive weather dashboard with forecasts and data visualizations.",
-    "description": "Created an interactive weather analytics dashboard using React and Chart.js. Features include real-time weather data, 7-day forecasts, and beautiful data visualizations with location-based services.",
-    "tags": [
-      "React",
-      "Chart.js",
-      "API",
-      "Data Viz"
-    ],
-    "role": "Frontend Developer",
-    "year": "2024",
-    "images": [
-      "/projects/weather-1.jpg"
-    ],
-    "links": {
-      "live": "https://example.com",
-      "repo": "https://github.com/example"
-    },
-    "accent": [
-      "#f0f9ff",
-      "#e0f2fe"
-    ],
-    "highlights": [
-      "Integrated weather API services",
-      "Built interactive data visualizations",
-      "Implemented geolocation features",
-      "Designed responsive dashboard layout"
-    ]
-  },
-  {
-    "id": "social-media-app",
-    "title": "Social Connect Platform",
-    "shortDesc": "Social networking app with posts, stories, and real-time messaging.",
-    "description": "Built a full-featured social media platform with user profiles, posts, stories, and real-time messaging. Implemented image uploads, likes, comments, and follow system using MERN stack.",
-    "tags": [
-      "React",
-      "Node.js",
-      "MongoDB",
-      "WebSocket"
-    ],
-    "role": "Full Stack Developer",
-    "year": "2023",
-    "images": [
-      "/projects/social-1.jpg"
-    ],
-    "links": {
-      "repo": "https://github.com/example"
-    },
-    "accent": [
-      "#fef3f2",
-      "#fee2e2"
-    ],
-    "highlights": [
-      "Built real-time messaging system",
-      "Implemented image upload and processing",
-      "Created social interaction features",
-      "Designed user profile system"
-    ]
-  },
-  {
-    "id": "fitness-tracker",
-    "title": "Fitness Tracking App",
-    "shortDesc": "Comprehensive fitness tracker with workout plans and progress analytics.",
-    "description": "Developed a comprehensive fitness tracking application with workout plans, exercise library, progress tracking, and nutrition logging. Features include custom workout builder and detailed analytics.",
-    "tags": [
-      "React Native",
-      "Firebase",
-      "Analytics"
-    ],
-    "role": "Mobile Developer",
-    "year": "2024",
-    "images": [
-      "/projects/fitness-1.jpg"
-    ],
-    "links": {
-      "live": "https://example.com"
-    },
-    "accent": [
-      "#f0fdf4",
-      "#dcfce7"
-    ],
-    "highlights": [
-      "Built workout planning system",
-      "Implemented progress tracking",
-      "Created exercise library",
-      "Designed nutrition logging features"
     ]
   }
 ]
