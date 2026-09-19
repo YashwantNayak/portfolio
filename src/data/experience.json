@@ -6,11 +6,6 @@
     "date": "Feb 2026 — Present",
     "location": "Raipur, India",
     "summary": "I worked in software support, where I fixed bugs and improved UI across multiple projects. I also contributed innovative ideas for product marketing.",
-    "highlights": [
-      "Resolved 20+ software support tickets and UI/UX improvements",
-      "Contributed to product marketing & digital presentation strategies",
-      "Collaborated with cross-functional software teams to streamline workflows"
-    ],
     "memories": [
       "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=600&q=80",
       "https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&w=600&q=80",
@@ -21,45 +16,31 @@
     ]
   },
   {
-    "id": "exp-2",
-    "company": "SetMyCart",
+    "id": "exp-1",
+    "company": "Emilo Ventures pvt. ltd.",
     "role": "Software developer intern",
-    "date": "Jun 2025 - Aug 2025",
-    "location": "Remote / Hybrid",
-    "summary": "Development of projects like SkyTM (Digital Wallet System), handling end-to-end design, development, and deployment using Angular, React.js, .NET, and Bootstrap.",
-    "highlights": [
-      "Developed SkyTM Digital Wallet System end-to-end frontend architecture",
-      "Built responsive payment dashboards with Angular & React.js",
-      "Integrated secure REST API endpoints with .NET backend"
-    ],
-    "memories": [
-      "https://images.unsplash.com/photo-1556742049-0a67daf4095a?auto=format&fit=crop&w=600&q=80",
-      "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?auto=format&fit=crop&w=600&q=80",
-      "https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=600&q=80",
-      "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=600&q=80",
-      "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=600&q=80",
-      "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=600&q=80"
-    ]
+    "date": "jun 2026 — Present",
+    "summary": "I worked in software support, where I fixed bugs and improved UI across multiple projects. I also contributed innovative ideas for product marketing."
+  },
+  {
+    "id": "exp-2",
+    "company": "VNR seeds ptv. ltd.",
+    "role": "Software developer intern",
+    "date": "Feb 2026 — may 2026",
+    "summary": "I worked in software support, where I fixed bugs and improved UI across multiple projects. I also contributed innovative ideas for product marketing."
   },
   {
     "id": "exp-3",
+    "company": "SetMyCart",
+    "role": "Software developer intern",
+    "date": "Jun 2025 - Aug 2025",
+    "summary": "Development of projects like SkyTM (Digital Wallet System), handling end-to-end design, development, and deployment using Angular, React.js, .NET, and Bootstrap."
+  },
+  {
+    "id": "exp-4",
     "company": "SSIPMT (COE)",
     "role": "Full Stack Developer (core team member)",
     "date": "Jul 2025 — Present",
-    "location": "Raipur, Chhattisgarh",
-    "summary": "Contributed to 8+ government projects currently live and used by citizens, developing web portals and applications for the Chhattisgarh government.",
-    "highlights": [
-      "Built & deployed Green Palna MIS system for local government administration",
-      "Engineered cookie-less authentication & citizen data portal",
-      "Managed 8+ live production web platforms used by state government bodies"
-    ],
-    "memories": [
-      "/projects/green_poster.png",
-      "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=600&q=80",
-      "/projects/mediguru.png",
-      "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=600&q=80",
-      "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=600&q=80",
-      "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=600&q=80"
-    ]
+    "summary": "Contributed to 8+ government projects currently live and used by citizens, developing web portals and applications for the Chhattisgarh government."
   }
 ]
