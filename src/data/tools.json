@@ -4,22 +4,7 @@
       "name": "React",
       "logo": "https://cdn.simpleicons.org/react"
     },
-    {
-      "name": "Angular",
-      "logo": "https://cdn.simpleicons.org/angular"
-    },
-    {
-      "name": "TypeScript",
-      "logo": "https://cdn.simpleicons.org/typescript"
-    },
-    {
-      "name": "JavaScript",
-      "logo": "https://cdn.simpleicons.org/javascript"
-    },
-    {
-      "name": "HTML5",
-      "logo": "https://cdn.simpleicons.org/html5"
-    },
+    
     {
       "name": "CSS3",
       "logo": "https://imgs.search.brave.com/7D1uAt3FTz7kD6XLJjfeG8dazQcmJ_gJjnPZi4SkmT4/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pY29u/LmljZXBhbmVsLmlv/L1RlY2hub2xvZ3kv/c3ZnL0NTUzMuc3Zn"
