@@ -3,9 +3,17 @@ import { motion, AnimatePresence } from 'framer-motion'
 import {
   getRawFileContent,
   saveRawFileContent,
+  syncAllFilesToGitHub,
   resetAllDataToDefaults,
   type DataFileName
 } from '../data/dataStore'
+import {
+  getGitHubConfig,
+  saveGitHubConfig,
+  isGitHubConfigured,
+  testGitHubConnection,
+  commitBinaryFileToGitHub
+} from '../utils/githubSync'
 
 const ADMIN_USER_ID = (import.meta as any).env?.VITE_ADMIN_USER_ID 
 const ADMIN_PASSWORD = (import.meta as any).env?.VITE_ADMIN_PASSWORD 
@@ -38,9 +46,27 @@ export const Admin: React.FC = () => {
   const [isSaving, setIsSaving] = useState(false)
   const [isUploadingResume, setIsUploadingResume] = useState(false)
 
+  // GitHub Sync State
+  const [showGithubModal, setShowGithubModal] = useState(false)
+  const [githubToken, setGithubToken] = useState('')
+  const [githubRepo, setGithubRepo] = useState('YashwantNayak/portfolio')
+  const [githubBranch, setGithubBranch] = useState('main')
+  const [isGhConnected, setIsGhConnected] = useState(false)
+  const [ghTesting, setGhTesting] = useState(false)
+  const [ghTestResult, setGhTestResult] = useState<{ success: boolean; message: string } | null>(null)
+  const [isSyncingAll, setIsSyncingAll] = useState(false)
+
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const lineNumbersRef = useRef<HTMLDivElement>(null)
   const pdfFileInputRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    const cfg = getGitHubConfig()
+    setGithubToken(cfg.token)
+    setGithubRepo(cfg.repo)
+    setGithubBranch(cfg.branch)
+    setIsGhConnected(isGitHubConfigured())
+  }, [])
 
   const handleResumeUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -58,21 +84,36 @@ export const Admin: React.FC = () => {
     reader.onload = async () => {
       try {
         const base64Data = reader.result as string
-        const res = await fetch('/api/upload-resume', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ base64Data, filename: file.name })
-        })
+        const cleanBase64 = base64Data.replace(/^data:application\/pdf;base64,/, '')
 
-        if (res.ok) {
-          const data = await res.json()
-          if (data.success) {
-            showToast('Resume PDF updated successfully on disk! (public/resume.pdf)')
-          } else {
-            showToast(`Upload failed: ${data.error}`, true)
+        // 1. Try local dev server disk write
+        let diskSaved = false
+        try {
+          const res = await fetch('/api/upload-resume', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ base64Data, filename: file.name })
+          })
+          if (res.ok) {
+            const data = await res.json()
+            if (data.success) diskSaved = true
           }
+        } catch {}
+
+        // 2. Try direct GitHub commit if configured
+        let ghSaved = false
+        if (isGitHubConfigured()) {
+          const gh1 = await commitBinaryFileToGitHub('public/resume.pdf', cleanBase64, 'Update resume.pdf via Admin Studio')
+          const gh2 = await commitBinaryFileToGitHub('public/Yashwant CV.pdf', cleanBase64, 'Update Yashwant CV.pdf via Admin Studio')
+          ghSaved = gh1.success && gh2.success
+        }
+
+        if (ghSaved) {
+          showToast('Resume PDF committed to GitHub & live deployment started! 🚀')
+        } else if (diskSaved) {
+          showToast('Resume PDF updated successfully on disk! (public/resume.pdf)')
         } else {
-          showToast('Server upload error. Verify Vite dev server is running.', true)
+          showToast('Uploaded to local session. Connect GitHub to auto-deploy PDF to site!', true)
         }
       } catch (err: any) {
         showToast(`Upload error: ${err.message}`, true)
@@ -185,13 +226,59 @@ export const Admin: React.FC = () => {
     setIsSaving(false)
 
     if (result.success) {
-      if (result.diskSaved) {
-        showToast(`Saved src/data/${activeFile} to disk`)
+      if (result.githubSaved) {
+        showToast(`🚀 Committed src/data/${activeFile} to GitHub! Live site is auto-deploying.`)
+      } else if (result.diskSaved) {
+        showToast(`💾 Saved src/data/${activeFile} to disk`)
       } else {
-        showToast(`Saved ${activeFile} to browser storage`)
+        showToast(`Saved ${activeFile} to browser only. Click "⚡ Connect GitHub" to save directly to files!`, true)
       }
     } else {
       showToast(`Save failed: ${result.error}`, true)
+    }
+  }
+
+  const handleTestGitHub = async () => {
+    setGhTesting(true)
+    setGhTestResult(null)
+    const res = await testGitHubConnection(githubToken, githubRepo)
+    setGhTesting(false)
+    setGhTestResult(res)
+    if (res.success) {
+      setIsGhConnected(true)
+    }
+  }
+
+  const handleSaveGitHubConfig = () => {
+    saveGitHubConfig({
+      token: githubToken,
+      repo: githubRepo,
+      branch: githubBranch
+    })
+    const configured = Boolean(githubToken && githubToken.trim().length > 0)
+    setIsGhConnected(configured)
+    showToast(configured ? 'GitHub sync configuration saved!' : 'GitHub token cleared')
+    if (configured) {
+      setShowGithubModal(false)
+    }
+  }
+
+  const handleSyncAllToGitHub = async () => {
+    if (!isGitHubConfigured()) {
+      showToast('Please enter & save your GitHub token first', true)
+      setShowGithubModal(true)
+      return
+    }
+    setIsSyncingAll(true)
+    showToast('Pushing all 5 files to GitHub repository...')
+    const res = await syncAllFilesToGitHub()
+    setIsSyncingAll(false)
+
+    if (res.success) {
+      showToast('🎉 All 5 files committed to GitHub! Live site auto-deployment triggered.')
+      setShowGithubModal(false)
+    } else {
+      showToast(`Sync finished with issues: ${res.errors.join(', ')}`, true)
     }
   }
 
@@ -307,6 +394,14 @@ export const Admin: React.FC = () => {
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <button
+              type="button"
+              onClick={() => setShowGithubModal(true)}
+              style={isGhConnected ? styles.ghConnectedBadge : styles.ghDisconnectedBadge}
+              title="GitHub Direct File Commit Configuration"
+            >
+              {isGhConnected ? '🟢 GitHub Synced' : '⚡ Connect GitHub'}
+            </button>
             <input
               type="file"
               ref={pdfFileInputRef}
@@ -367,6 +462,49 @@ export const Admin: React.FC = () => {
             </div>
 
             <div style={{ marginTop: 'auto', paddingTop: 16 }}>
+              {/* GitHub Direct File Sync Card */}
+              <div style={{ marginBottom: 14, padding: 12, borderRadius: 14, background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
+                  <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: 0.8, color: 'rgba(255,255,255,0.5)' }}>
+                    GITHUB FILE SYNC
+                  </span>
+                  <span style={{ fontSize: 10, color: isGhConnected ? '#4ade80' : '#f59e0b', fontWeight: 600 }}>
+                    {isGhConnected ? 'Connected' : 'Not setup'}
+                  </span>
+                </div>
+                <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.4)', marginBottom: 10, lineHeight: 1.3 }}>
+                  {isGhConnected
+                    ? 'Edits commit directly to YashwantNayak/portfolio & deploy across all devices.'
+                    : 'Connect GitHub token to commit edits directly to files.'}
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setShowGithubModal(true)}
+                  style={{ ...styles.headerOutlineBtn, width: '100%', textAlign: 'center', boxSizing: 'border-box', marginBottom: isGhConnected ? 8 : 0 }}
+                >
+                  ⚙️ GitHub Settings
+                </button>
+                {isGhConnected && (
+                  <button
+                    type="button"
+                    onClick={handleSyncAllToGitHub}
+                    disabled={isSyncingAll}
+                    style={{
+                      ...styles.headerOutlineBtn,
+                      width: '100%',
+                      textAlign: 'center',
+                      boxSizing: 'border-box',
+                      background: 'rgba(34, 197, 94, 0.12)',
+                      borderColor: 'rgba(34, 197, 94, 0.35)',
+                      color: '#4ade80'
+                    }}
+                  >
+                    {isSyncingAll ? 'Syncing...' : '🚀 Push All 5 Files'}
+                  </button>
+                )}
+              </div>
+
+              {/* Resume Management */}
               <div style={{ marginBottom: 14, padding: 12, borderRadius: 14, background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)' }}>
                 <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: 0.8, color: 'rgba(255,255,255,0.5)', marginBottom: 4 }}>
                   RESUME MANAGEMENT
@@ -454,6 +592,155 @@ export const Admin: React.FC = () => {
           </main>
         </div>
       </div>
+
+      {/* GitHub Sync Modal */}
+      <AnimatePresence>
+        {showGithubModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            style={styles.modalOverlay}
+            onClick={() => setShowGithubModal(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              style={styles.modalContent}
+              onClick={e => e.stopPropagation()}
+            >
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 18 }}>
+                <div>
+                  <h3 style={{ margin: 0, fontSize: 18, fontWeight: 700, color: '#fff' }}>
+                    GitHub Direct File Sync
+                  </h3>
+                  <p style={{ margin: '4px 0 0', fontSize: 12, color: 'rgba(255,255,255,0.5)', lineHeight: 1.4 }}>
+                    Save edits directly into GitHub repo files. Changes auto-deploy live to all devices!
+                  </p>
+                </div>
+                <button
+                  onClick={() => setShowGithubModal(false)}
+                  style={styles.modalCloseBtn}
+                >
+                  ✕
+                </button>
+              </div>
+
+              {/* Status Alert */}
+              {ghTestResult && (
+                <div
+                  style={{
+                    padding: '10px 14px',
+                    borderRadius: 12,
+                    fontSize: 12,
+                    marginBottom: 16,
+                    background: ghTestResult.success ? 'rgba(34, 197, 94, 0.15)' : 'rgba(239, 68, 68, 0.15)',
+                    border: `1px solid ${ghTestResult.success ? 'rgba(34, 197, 94, 0.3)' : 'rgba(239, 68, 68, 0.3)'}`,
+                    color: ghTestResult.success ? '#4ade80' : '#f87171'
+                  }}
+                >
+                  {ghTestResult.success ? '✅ ' : '⚠️ '}
+                  {ghTestResult.message}
+                </div>
+              )}
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+                <div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
+                    <label style={styles.modalLabel}>Personal Access Token (classic or fine-grained)</label>
+                    <a
+                      href="https://github.com/settings/tokens/new?scopes=repo&description=Portfolio+Admin+Sync"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={styles.tokenLink}
+                    >
+                      Create token on GitHub ↗
+                    </a>
+                  </div>
+                  <input
+                    type="password"
+                    value={githubToken}
+                    onChange={e => setGithubToken(e.target.value)}
+                    placeholder="ghp_xxxxxxxxxxxxxxxxxxxx"
+                    style={styles.modalInput}
+                  />
+                  <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', marginTop: 4, display: 'block' }}>
+                    Requires <strong>repo</strong> permissions. Stored safely in your browser.
+                  </span>
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 12 }}>
+                  <div>
+                    <label style={styles.modalLabel}>Repository (owner/repo)</label>
+                    <input
+                      type="text"
+                      value={githubRepo}
+                      onChange={e => setGithubRepo(e.target.value)}
+                      placeholder="YashwantNayak/portfolio"
+                      style={styles.modalInput}
+                    />
+                  </div>
+                  <div>
+                    <label style={styles.modalLabel}>Branch</label>
+                    <input
+                      type="text"
+                      value={githubBranch}
+                      onChange={e => setGithubBranch(e.target.value)}
+                      placeholder="main"
+                      style={styles.modalInput}
+                    />
+                  </div>
+                </div>
+
+                <div style={{ display: 'flex', gap: 10, marginTop: 4 }}>
+                  <button
+                    type="button"
+                    onClick={handleTestGitHub}
+                    disabled={ghTesting || !githubToken.trim()}
+                    style={styles.modalSecondaryBtn}
+                  >
+                    {ghTesting ? 'Testing...' : '🔍 Test Connection'}
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={handleSaveGitHubConfig}
+                    style={styles.modalPrimaryBtn}
+                  >
+                    Save Configuration
+                  </button>
+                </div>
+
+                {isGhConnected && (
+                  <div style={{ marginTop: 10, paddingTop: 14, borderTop: '1px solid rgba(255,255,255,0.08)' }}>
+                    <div style={{ fontSize: 12, fontWeight: 600, color: '#fff', marginBottom: 4 }}>
+                      One-Click Local Data Migration
+                    </div>
+                    <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.4)', marginBottom: 10 }}>
+                      Push all data currently in your browser (projects, experience, tools, blogs, etc.) straight into GitHub repository files:
+                    </div>
+                    <button
+                      type="button"
+                      onClick={handleSyncAllToGitHub}
+                      disabled={isSyncingAll}
+                      style={{
+                        ...styles.modalPrimaryBtn,
+                        width: '100%',
+                        background: '#22c55e',
+                        color: '#000'
+                      }}
+                    >
+                      {isSyncingAll ? 'Syncing 5 files...' : '🚀 Push All 5 Files to GitHub Now'}
+                    </button>
+                  </div>
+                )}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   )
 }
@@ -783,6 +1070,114 @@ const styles: Record<string, React.CSSProperties> = {
     fontWeight: 600,
     boxShadow: '0 15px 30px rgba(0, 0, 0, 0.3)',
     zIndex: 9999
+  },
+  ghConnectedBadge: {
+    padding: '7px 14px',
+    borderRadius: 999,
+    border: '1px solid rgba(34, 197, 94, 0.4)',
+    background: 'rgba(34, 197, 94, 0.1)',
+    color: '#4ade80',
+    fontSize: 12,
+    fontWeight: 600,
+    cursor: 'pointer',
+    display: 'flex',
+    alignItems: 'center',
+    gap: 6
+  },
+  ghDisconnectedBadge: {
+    padding: '7px 14px',
+    borderRadius: 999,
+    border: '1px solid rgba(245, 158, 11, 0.4)',
+    background: 'rgba(245, 158, 11, 0.1)',
+    color: '#fbbf24',
+    fontSize: 12,
+    fontWeight: 600,
+    cursor: 'pointer',
+    display: 'flex',
+    alignItems: 'center',
+    gap: 6
+  },
+  modalOverlay: {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    background: 'rgba(0, 0, 0, 0.75)',
+    backdropFilter: 'blur(8px)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 10000,
+    padding: 20
+  },
+  modalContent: {
+    width: '100%',
+    maxWidth: 520,
+    background: '#111111',
+    border: '1px solid rgba(255, 255, 255, 0.12)',
+    borderRadius: 24,
+    padding: '28px 28px',
+    boxShadow: '0 25px 60px rgba(0, 0, 0, 0.6)',
+    color: '#ffffff',
+    boxSizing: 'border-box'
+  },
+  modalCloseBtn: {
+    background: 'rgba(255, 255, 255, 0.06)',
+    border: 'none',
+    color: 'rgba(255, 255, 255, 0.6)',
+    width: 28,
+    height: 28,
+    borderRadius: '50%',
+    cursor: 'pointer',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontSize: 13
+  },
+  modalLabel: {
+    fontSize: 12,
+    fontWeight: 600,
+    color: 'rgba(255, 255, 255, 0.7)',
+    display: 'block',
+    marginBottom: 6
+  },
+  tokenLink: {
+    fontSize: 11,
+    color: '#60a5fa',
+    textDecoration: 'none'
+  },
+  modalInput: {
+    width: '100%',
+    padding: '11px 14px',
+    borderRadius: 12,
+    border: '1px solid rgba(255, 255, 255, 0.12)',
+    background: 'rgba(255, 255, 255, 0.05)',
+    color: '#ffffff',
+    fontSize: 13,
+    outline: 'none',
+    boxSizing: 'border-box'
+  },
+  modalPrimaryBtn: {
+    flex: 1,
+    padding: '10px 18px',
+    borderRadius: 999,
+    border: 'none',
+    background: '#ffffff',
+    color: '#000000',
+    fontWeight: 600,
+    fontSize: 13,
+    cursor: 'pointer'
+  },
+  modalSecondaryBtn: {
+    padding: '10px 18px',
+    borderRadius: 999,
+    border: '1px solid rgba(255, 255, 255, 0.15)',
+    background: 'rgba(255, 255, 255, 0.05)',
+    color: '#ffffff',
+    fontWeight: 500,
+    fontSize: 13,
+    cursor: 'pointer'
   }
 }
 

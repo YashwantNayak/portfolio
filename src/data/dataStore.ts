@@ -73,23 +73,83 @@ export function getRawFileContent(fileName: DataFileName): string {
   return JSON.stringify(data, null, 2)
 }
 
+import {
+  commitFileToGitHub,
+  isGitHubConfigured
+} from '../utils/githubSync'
+
 export async function saveRawFileContent(
   fileName: DataFileName,
   jsonString: string
-): Promise<{ success: boolean; diskSaved: boolean; error?: string }> {
+): Promise<{
+  success: boolean
+  diskSaved: boolean
+  githubSaved?: boolean
+  githubError?: string
+  error?: string
+}> {
   try {
     const parsedData = JSON.parse(jsonString)
     const storageKey = STORAGE_KEYS[fileName]
     saveToStorage(storageKey, parsedData)
     notifySubscribers()
 
-    // Strip extension for API call (e.g., 'projects.json' -> 'projects')
+    // 1. Try local Vite dev server disk save (if running on localhost)
     const fileKey = fileName.replace('.json', '')
     const diskSaved = await saveToDiskApi(fileKey, parsedData)
 
-    return { success: true, diskSaved }
+    // 2. Commit directly to GitHub repository if token is configured
+    let githubSaved = false
+    let githubError: string | undefined
+
+    if (isGitHubConfigured()) {
+      const ghResult = await commitFileToGitHub(fileName, jsonString)
+      githubSaved = ghResult.success
+      if (!ghResult.success) {
+        githubError = ghResult.error
+      }
+    }
+
+    return { success: true, diskSaved, githubSaved, githubError }
   } catch (e: any) {
     return { success: false, diskSaved: false, error: e.message || 'Invalid JSON format' }
+  }
+}
+
+export async function syncAllFilesToGitHub(): Promise<{
+  success: boolean
+  committed: string[]
+  failed: string[]
+  errors: string[]
+}> {
+  const files: DataFileName[] = [
+    'projects.json',
+    'experience.json',
+    'personalInfo.json',
+    'tools.json',
+    'blogPosts.json'
+  ]
+
+  const committed: string[] = []
+  const failed: string[] = []
+  const errors: string[] = []
+
+  for (const file of files) {
+    const content = getRawFileContent(file)
+    const result = await commitFileToGitHub(file, content, `Sync ${file} via Admin Studio`)
+    if (result.success) {
+      committed.push(file)
+    } else {
+      failed.push(file)
+      if (result.error) errors.push(`${file}: ${result.error}`)
+    }
+  }
+
+  return {
+    success: failed.length === 0,
+    committed,
+    failed,
+    errors
   }
 }
 
